@@ -1,1 +1,39 @@
 aid: cloudability
+name: Cloudability
+description: >-
+  Cloudability (Apptio) is a cloud cost management and FinOps platform providing
+  cost visibility, optimization recommendations, and governance for multi-cloud
+  environments.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - FinOps
+  - Cloud Cost Management
+url: >-
+  https://raw.githubusercontent.com/api-evangelist/cloudability/refs/heads/main/apis.yml
+created: '2026-03-27'
+modified: '2026-03-27'
+specificationVersion: '0.19'
+apis:
+  - aid: cloudability:cloudability
+    name: Cloudability
+    description: >-
+      Cloudability (Apptio) is a cloud cost management and FinOps platform
+      providing cost visibility, optimization recommendations, and governance for
+      multi-cloud environments.
+    humanURL: https://www.apptio.com/products/cloudability/
+    tags:
+      - FinOps
+    properties:
+      - type: Documentation
+        url: https://developers.cloudability.com/
+      - type: Getting Started
+        url: https://developers.cloudability.com/
+common:
+  - type: Website
+    url: https://www.apptio.com/products/cloudability/
+  - type: Documentation
+    url: https://developers.cloudability.com/
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
