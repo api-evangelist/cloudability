@@ -1,0 +1,136 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "cloudability": "https://api.cloudability.com/v3/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "finops": "https://www.finops.org/framework/",
+
+    "ReportResult": {
+      "@id": "cloudability:ReportResult",
+      "@context": {
+        "metrics": {
+          "@id": "cloudability:metrics",
+          "@container": "@list"
+        },
+        "dimensions": {
+          "@id": "cloudability:dimensions",
+          "@container": "@list"
+        },
+        "startDate": {
+          "@id": "dcterms:temporal",
+          "@type": "xsd:date"
+        },
+        "endDate": {
+          "@id": "cloudability:end_date",
+          "@type": "xsd:date"
+        },
+        "results": {
+          "@id": "cloudability:results",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "BusinessMapping": {
+      "@id": "cloudability:BusinessMapping",
+      "@context": {
+        "id": "cloudability:id",
+        "name": "schema:name",
+        "kind": "cloudability:kind",
+        "default_value": "cloudability:default_value",
+        "statements": {
+          "@id": "cloudability:statements",
+          "@container": "@list"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "updatedAt": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "RightsizingRecommendation": {
+      "@id": "cloudability:RightsizingRecommendation",
+      "@context": {
+        "resourceId": "cloudability:resource_identifier",
+        "vendor": "cloudability:vendor",
+        "service": "cloudability:service",
+        "currentInstanceType": "cloudability:current_instance_type",
+        "recommendedInstanceType": "cloudability:recommended_instance_type",
+        "estimatedMonthlySavings": "cloudability:estimated_savings",
+        "currency": "schema:priceCurrency",
+        "confidence": "cloudability:confidence",
+        "utilizationMetrics": "cloudability:utilization"
+      }
+    },
+
+    "Anomaly": {
+      "@id": "cloudability:Anomaly",
+      "@context": {
+        "id": "cloudability:id",
+        "dimensionType": "cloudability:dimension_type",
+        "dimensionValue": "cloudability:dimension_value",
+        "detectedAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "expectedCost": "cloudability:expected_cost",
+        "actualCost": "cloudability:actual_cost",
+        "delta": "cloudability:delta",
+        "status": "cloudability:status",
+        "severity": "cloudability:severity"
+      }
+    },
+
+    "VendorCredential": {
+      "@id": "cloudability:VendorCredential",
+      "@context": {
+        "id": "cloudability:id",
+        "vendor": "cloudability:vendor",
+        "accountIdentifier": "cloudability:account_identifier",
+        "verification": "cloudability:verification",
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "View": {
+      "@id": "cloudability:View",
+      "@context": {
+        "id": "cloudability:id",
+        "title": "schema:name",
+        "filters": {
+          "@id": "cloudability:filters",
+          "@container": "@list"
+        },
+        "createdAt": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "Budget": {
+      "@id": "cloudability:Budget",
+      "@context": {
+        "id": "cloudability:id",
+        "name": "schema:name",
+        "amount": "cloudability:amount",
+        "currency": "schema:priceCurrency",
+        "period": "cloudability:period",
+        "alertThresholds": {
+          "@id": "cloudability:alert_thresholds",
+          "@container": "@set"
+        }
+      }
+    }
+  }
+}

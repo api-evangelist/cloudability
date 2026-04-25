@@ -1,0 +1,149 @@
+# Naftiko capabilities profile for Cloudability (Apptio / IBM).
+# Capabilities map FinOps verbs against the Cloudability v3 REST API:
+# reporting, business mappings, rightsizing, anomalies, vendor onboarding,
+# views, and budgets.
+provider: cloudability
+name: Cloudability
+description: >-
+  Capabilities cover building cost-and-usage reports, managing business
+  mapping allocation rules, surfacing rightsizing recommendations, querying
+  cost anomalies, onboarding cloud vendor credentials, and managing views
+  and budgets across AWS, Azure, GCP and other cloud accounts.
+capabilities:
+  - id: cloudability.reporting.run
+    name: Run cost report
+    description: Build and execute a cost-and-usage query for a date range.
+    api: cloudability:api-v3
+    inputs:
+      - metrics
+      - dimensions
+      - filters
+      - start_date
+      - end_date
+      - sort
+    outputs:
+      - results
+      - row_count
+
+  - id: cloudability.reporting.dimensions
+    name: List reporting dimensions
+    description: Return the list of dimensions available for reporting queries.
+    api: cloudability:api-v3
+    outputs:
+      - dimensions
+
+  - id: cloudability.reporting.metrics
+    name: List reporting metrics
+    description: Return the list of metrics available for reporting queries.
+    api: cloudability:api-v3
+    outputs:
+      - metrics
+
+  - id: cloudability.business-mappings.list
+    name: List business mappings
+    description: Return all configured business mappings.
+    api: cloudability:business-mappings
+    inputs:
+      - limit
+      - offset
+    outputs:
+      - items
+      - total
+
+  - id: cloudability.business-mappings.create
+    name: Create business mapping
+    description: Define a new rule-based dimension for cost allocation.
+    api: cloudability:business-mappings
+    inputs:
+      - name
+      - kind
+      - default_value
+      - statements
+    outputs:
+      - id
+      - status
+
+  - id: cloudability.business-mappings.update
+    name: Update business mapping
+    description: Update statements, name, or default value of an existing mapping.
+    api: cloudability:business-mappings
+    inputs:
+      - id
+      - name
+      - default_value
+      - statements
+    outputs:
+      - status
+
+  - id: cloudability.rightsizing.list
+    name: List rightsizing recommendations
+    description: Return active rightsizing recommendations across vendors.
+    api: cloudability:rightsizing
+    inputs:
+      - vendor
+      - service
+      - account_id
+      - limit
+      - offset
+    outputs:
+      - items
+      - estimated_savings
+
+  - id: cloudability.anomalies.list
+    name: List cost anomalies
+    description: Return open cost anomalies on a dimension.
+    api: cloudability:anomalies
+    inputs:
+      - dimension_type
+      - severity
+      - status
+      - from_date
+      - to_date
+    outputs:
+      - items
+
+  - id: cloudability.anomalies.acknowledge
+    name: Acknowledge anomaly
+    description: Mark a detected anomaly as reviewed or dismissed.
+    api: cloudability:anomalies
+    inputs:
+      - anomaly_id
+      - status
+      - note
+    outputs:
+      - status
+
+  - id: cloudability.vendors.list
+    name: List vendor credentials
+    description: List configured cloud vendor connections (AWS, Azure, GCP, OCI).
+    api: cloudability:vendor-credentials
+    outputs:
+      - items
+
+  - id: cloudability.vendors.add
+    name: Add vendor credential
+    description: Onboard a new payer account, billing scope, or billing project.
+    api: cloudability:vendor-credentials
+    inputs:
+      - vendor
+      - account_identifier
+      - role_arn
+      - bucket
+      - region
+    outputs:
+      - id
+      - verification
+
+  - id: cloudability.views.list
+    name: List views
+    description: Return saved cost-explorer views.
+    api: cloudability:api-v3
+    outputs:
+      - items
+
+  - id: cloudability.budgets.list
+    name: List budgets
+    description: Return configured spend budgets and current consumption.
+    api: cloudability:api-v3
+    outputs:
+      - items
