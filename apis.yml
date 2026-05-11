@@ -173,6 +173,11 @@ common:
     url: rules/cloudability-rules.yml
   - type: Naftiko Capabilities
     url: capabilities/cloud-cost-finops.yaml
+  - type: Integrations
+    url: https://www.apptio.com/company/partners/
+integrations:
+  - name: Apptio
+  - name: ApptioCareers-Employee[1]
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
