@@ -8,7 +8,7 @@ access: 3rd-Party
 position: Consumer
 specificationVersion: '0.19'
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-x-type: company
+kind: company
 tags:
   - Cloud Cost Management
   - Cost Optimization
@@ -39,7 +39,7 @@ apis:
       - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
         type: Documentation
       - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
-        type: Getting Started
+        type: GettingStarted
     description: >-
       The Cloudability v3 API is the modern REST interface for the platform.
       It exposes resource-oriented endpoints for reporting, dimensions and
@@ -167,7 +167,7 @@ common:
     url: https://github.com/cloudability
   - type: Training
     url: https://education.apptio.com/courses/ibm-cloudability-api
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/cloudability-context.jsonld
   - type: Spectral
     url: rules/cloudability-rules.yml
