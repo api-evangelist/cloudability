@@ -157,6 +157,8 @@ apis:
       cloud vendors. It supports listing existing credentials, validating
       connectivity, rotating secrets, and onboarding new accounts.
 common:
+  - type: DomainSecurity
+    url: security/cloudability-domain-security.yml
   - type: Website
     url: https://www.apptio.com/products/cloudability/
   - type: Portal
