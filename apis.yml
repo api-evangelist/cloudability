@@ -185,8 +185,6 @@ common:
     url: json-ld/cloudability-context.jsonld
   - type: Spectral
     url: rules/cloudability-rules.yml
-  - type: X-NaftikoCapabilities
-    url: capabilities/cloud-cost-finops.yaml
   - type: Integrations
     url: https://www.apptio.com/company/partners/
 integrations:
