@@ -111,7 +111,7 @@ apis:
   - aid: cloudability:business-mappings
     name: Cloudability Business Mappings API
     tags:
-      - Allocation
+      - Allocations
       - Business Mappings
       - Showback
       - Tagging
