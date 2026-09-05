@@ -1,0 +1,113 @@
+specification: API Commons Lifecycle
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  IBM Cloudability documentation on www.ibm.com/docs (getting started, users end
+  point, provision your container agent), the Cloudability and IBM Apptio
+  Statuspage instances, and the GitHub/Helm release metadata for the collection
+  agents — all read 2026-09-05.
+description: >-
+  Versioning, deprecation and availability posture for the Cloudability API
+  surface. Cloudability publishes no formal API deprecation policy and emits no
+  Sunset/Deprecation headers, but it does publish one hard, dated
+  end-of-functionality commitment for its Kubernetes collection agent and it runs
+  a dedicated public status page whose components include the API itself.
+versioning:
+  scheme: url-path-major
+  current: v3
+  base: https://api.cloudability.com/v3
+  previous:
+    - version: v1
+      base: https://app.cloudability.com/api/v1
+      auth: api_key query parameter
+      status: legacy-available
+      note: >-
+        Still reachable; IBM recommends v3 for new integrations. No retirement
+        date has been published for v1, which means a consumer on v1 has no
+        planning horizon at all.
+  minor_signalling: none
+  note: >-
+    There is no minor version, no version header and no date-pinned release
+    channel. An additive or behavioural change inside v3 reaches every client
+    silently.
+deprecation_policy:
+  published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    No published API deprecation policy, no notice period, and no RFC 8594
+    Sunset/Deprecation headers observed on any api.cloudability.com response.
+    Deprecations are announced in product documentation and release notes only.
+deprecations:
+  - subject: Cloudability metrics-agent (legacy Kubernetes container metrics agent)
+    kind: agent
+    status: deprecated
+    end_of_functionality: '2026-11-19'
+    replacement: IBM FinOps Agent (finops-agent Helm chart)
+    replacement_install: helm repo add ibm-finops https://kubecost.github.io/finops-agent-chart
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=allocation-provision-your-container-agent
+    quote: >-
+      "IBM Cloudability is migrating from the legacy container metrics agent to
+      the new IBM FinOps Agent. The legacy metrics agent is being deprecated and
+      will reach end of functionality on November 19, 2026."
+    note: >-
+      A genuine dated sunset — the strongest lifecycle signal in this record. Note
+      that the deprecated agent was still shipping releases as recently as
+      2026-08-21 (metrics-agent 2.14.15), so release activity is not a signal of
+      its survival.
+  - subject: Cloudability v3 Users endpoint (write operations)
+    kind: endpoint-group
+    status: partially-superseded
+    end_of_functionality: null
+    replacement: Apptio Frontdoor API
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-users-end-point
+    quote: >-
+      "user CRUD actions are now managed in Apptio's Frontdoor API"
+    note: >-
+      Read and limited-update operations remain on /v3/users; creation and
+      deletion have moved to a different API on a different host
+      (frontdoor.apptio.com). No sunset date is given for what remains.
+  - subject: Legacy Cloudability developer documentation hosts
+    kind: documentation
+    status: dead
+    end_of_functionality: unknown
+    evidence: developers.cloudability.com and support.cloudability.com, probed 2026-09-05
+    note: >-
+      Both hosts still answer and still 301 — to https://help.apptio.com/, which
+      has NO DNS A record (NOERROR, zero answers, confirmed against 8.8.8.8).
+      Every deep link into the old Cloudability API reference and support centre
+      therefore terminates in a DNS failure rather than a redirect to the IBM
+      docs that replaced it. Live documentation is at
+      https://www.ibm.com/docs/en/cloudability-commercial/.
+status_page:
+  url: https://status.cloudability.com/
+  http_status: 200
+  provider: Atlassian Statuspage
+  page_id: 7mfckctpqk22
+  machine_readable: https://status.cloudability.com/api/v2/summary.json
+  components_include_api: true
+  note: >-
+    A dedicated Cloudability status page whose component list names "API" per
+    region alongside Login/SSO (Frontdoor) — the API is a first-class,
+    independently-reported component rather than being folded into a generic
+    "platform" indicator.
+  parent_status_page:
+    url: https://status.apptio.com/
+    http_status: 200
+    page_id: xhll3nj97jqx
+    components: 91
+    note: IBM Apptio platform-wide status, covering Frontdoor, Costing/Billing, Planning and Apptio BI.
+sla:
+  published: false
+  note: >-
+    No public SLA or uptime commitment is published on the status page, the
+    product page or the trust page. Availability terms are contractual.
+support:
+  url: https://www.ibm.com/support/pages/node/7032143
+  community: https://community.ibm.com/community/user/groups/community-home?CommunityKey=15c0e07d-35c0-49de-a84b-019253d13376
+  note: IBM product support page plus the IBM TechXchange Cloudability community.

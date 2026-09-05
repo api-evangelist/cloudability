@@ -1,0 +1,177 @@
+specification: API Commons MCP
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: derived
+status: candidate
+source: >-
+  Searched 2026-09-05 for an official IBM/Apptio Cloudability MCP server across
+  the product documentation, the IBM ideas portal, npm and MCP directories. None
+  exists. The candidate tool list below is derived from endpoint groups IBM
+  publishes in its own v3 API reference and from the first-party Postman
+  collections in github.com/IBM/Apptio-Tools.
+description: >-
+  Cloudability ships no MCP server. IBM's own ideas portal carries an open
+  customer request for one (CLOUDY-I-1215, "Support Model Context Protocol (MCP)
+  servers to enable secure, standardized AI assistant integration with Apptio",
+  19 votes, status "Planned for future release", created 2026-01-20) — which is
+  first-party confirmation that the capability does not exist today. This file
+  records a CANDIDATE tool surface only.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+  note: >-
+    mode is `none` because nobody at IBM or Apptio ships a server — neither a
+    remote endpoint an agent can POST to nor a local stdio package a human can
+    install. No endpoint URL is guessed. If Cloudability later publishes one, the
+    auth would be expected to follow the API: HTTP Basic with a Cloudability API
+    key, or the apptio-opentoken header pair.
+official_server:
+  exists: false
+  evidence:
+    - url: https://automation-management.ideas.ibm.com/ideas/CLOUDY-I-1215
+      status: 200
+      quote: >-
+        "Support Model Context Protocol (MCP) servers to enable secure,
+        standardized AI assistant integration with Apptio … Support for an MCP
+        server or MCP-compatible interface for Apptio … Ability to expose Apptio
+        APIs via MCP for AI-based use cases"
+      idea_status: Planned for future release
+      created: '2026-01-20'
+      votes: 19
+community_servers:
+  - name: cloudability-mcp-server
+    url: https://github.com/eelzinaty/cloudability-mcp-server
+    owner: eelzinaty
+    owner_type: individual
+    official: false
+    license: MIT
+    last_push: '2026-06-10'
+    note: >-
+      A third-party MCP server wrapping the Cloudability API, written by an
+      individual. Listed here so it is not mistaken for a vendor surface — it is
+      not endorsed by, published by, or supported by IBM or Apptio, and this
+      record emits no MCPServer pointer on its account.
+candidate_tools:
+  note: >-
+    Derived, not published. Each tool maps to an endpoint group IBM documents in
+    the Cloudability v3 API reference. Input schemas are NOT specified: without an
+    OpenAPI there is no machine-readable parameter definition to inherit, and
+    inventing one would be fabrication.
+  tools:
+    - name: cloudability_run_cost_report
+      category: reporting
+      rest: null
+      source: docs-toc
+      confidence: low
+      description: >-
+        Run a cost-and-usage query over the normalized billing dataset. IBM
+        documents a "Cost Reporting End Point" group but its exact path was not
+        read first-hand, so no path is asserted here.
+    - name: cloudability_list_anomalies
+      category: anomalies
+      rest: GET /v3/anomalies
+      source: postman
+      confidence: high
+    - name: cloudability_list_anomaly_subscriptions
+      category: anomalies
+      rest: GET /v3/anomaly-subscriptions
+      source: docs
+      confidence: high
+    - name: cloudability_create_anomaly_subscription
+      category: anomalies
+      rest: POST /v3/anomaly-subscriptions
+      source: docs
+      confidence: high
+      mutating: true
+    - name: cloudability_delete_anomaly_subscription
+      category: anomalies
+      rest: DELETE /v3/anomaly-subscriptions/:subscriptionId
+      source: docs
+      confidence: high
+      mutating: true
+    - name: cloudability_list_business_mappings
+      category: allocation
+      rest: GET /v3/business-mappings
+      source: postman
+      confidence: high
+    - name: cloudability_list_business_metrics
+      category: allocation
+      rest: GET /v3/business-mappings/metrics
+      source: postman
+      confidence: high
+    - name: cloudability_list_rightsizing_ec2
+      category: optimization
+      rest: GET /v3/rightsizing/aws/recommendations/ec2
+      source: postman
+      confidence: high
+    - name: cloudability_list_rightsizing_ebs
+      category: optimization
+      rest: GET /v3/rightsizing/aws/recommendations/ebs
+      source: postman
+      confidence: high
+    - name: cloudability_list_rightsizing_azure_compute
+      category: optimization
+      rest: GET /v3/rightsizing/azure/recommendations/compute
+      source: postman
+      confidence: high
+    - name: cloudability_list_container_clusters
+      category: containers
+      rest: GET /v3/containers/clusters
+      source: postman
+      confidence: high
+    - name: cloudability_list_container_labels
+      category: containers
+      rest: GET /v3/containers/labels
+      source: postman
+      confidence: high
+    - name: cloudability_list_views
+      category: views
+      rest: GET /v3/views
+      source: postman
+      confidence: high
+    - name: cloudability_list_users
+      category: administration
+      rest: GET /v3/users
+      source: docs
+      confidence: high
+    - name: cloudability_get_user
+      category: administration
+      rest: GET /v3/users/{userId}
+      source: docs
+      confidence: high
+    - name: cloudability_update_user
+      category: administration
+      rest: PUT /v3/users/{userId}
+      source: docs
+      confidence: high
+      mutating: true
+      note: Requires the UserManagementFeatureFullAccess permission.
+    - name: cloudability_list_byod_accounts
+      category: vendor-credentials
+      rest: GET /v3/vendors/byod/accounts
+      source: docs
+      confidence: high
+      note: FOCUS custom-data (BYOD) credentials.
+    - name: cloudability_verify_byod_account
+      category: vendor-credentials
+      rest: POST /v3/vendors/byod/accounts/:accountId/verification
+      source: docs
+      confidence: high
+      mutating: true
+    - name: cloudability_list_workload_predictions
+      category: planning
+      rest: GET /v3/prediction/workload/instance/list
+      source: postman
+      confidence: high
+agent_readiness_note: >-
+  An agent cannot reach Cloudability today without a hand-written HTTP client:
+  no MCP server, no OpenAPI to generate one from, no llms.txt on any vendor host,
+  no agent card, and an API host that answers 401 to every anonymous request
+  including its own discovery paths.

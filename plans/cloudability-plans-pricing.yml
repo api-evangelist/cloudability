@@ -4,209 +4,71 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cloudability
 providerId: cloudability
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  https://www.apptio.com/products/cloudability/pricing/ (probed 2026-09-05 — 200
+  after redirect to https://www.apptio.com/products/cloudability/contact-us/) and
+  https://www.ibm.com/products/cloudability (301 to https://www.ibm.com/products).
 tags:
   - Cloud Cost Management
   - Cost Optimization
   - FinOps
   - Multi-Cloud
-  - Recommendations
-  - Reporting
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
-plans:
-  - id: cloudability-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Cloudability API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Cloudability API v3
-      - name: Cloudability API v1 (Legacy)
-      - name: Cloudability Reporting API
-      - name: Cloudability Business Mappings API
-      - name: Cloudability Rightsizing Recommendations API
-      - name: Cloudability Anomaly Detection API
-      - name: Cloudability Vendor Credentials API
-  - id: cloudability-pro
-    name: Professional
-    type: paid
-    description: Production tier for Cloudability. Provides higher quotas, priority support, and access
-      to the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Cloudability API v3
-      - name: Cloudability API v1 (Legacy)
-      - name: Cloudability Reporting API
-      - name: Cloudability Business Mappings API
-      - name: Cloudability Rightsizing Recommendations API
-      - name: Cloudability Anomaly Detection API
-      - name: Cloudability Vendor Credentials API
-  - id: cloudability-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Cloudability. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains:
-          - https://api.cloudability.com/v3
-          - https://app.cloudability.com/api/v1
-          - https://api.cloudability.com/v3/reporting
-          - https://api.cloudability.com/v3/business-mappings
-          - https://api.cloudability.com/v3/rightsizing
-          - https://api.cloudability.com/v3/anomalies
-          - https://api.cloudability.com/v3/vendors
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Cloudability API v3
-      - name: Cloudability API v1 (Legacy)
-      - name: Cloudability Reporting API
-      - name: Cloudability Business Mappings API
-      - name: Cloudability Rightsizing Recommendations API
-      - name: Cloudability Anomaly Detection API
-      - name: Cloudability Vendor Credentials API
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  - Pricing
+description: >-
+  IBM Cloudability publishes no plans and no prices. The product is sold
+  enterprise-direct: the pricing path on the vendor's own site resolves to a
+  contact-sales form. This file records that absence as a measurement.
+plan_count: 0
+public_pricing: false
+pricing_model: enterprise-quote
+currency: null
+free_tier: false
+trial:
+  offered: unknown
+  note: >-
+    Any evaluation access is arranged through the same contact-sales flow; no
+    self-serve trial signup was found on apptio.com or ibm.com.
+api_metering:
+  metered: false
+  note: >-
+    The Cloudability API is an entitlement of a Cloudability subscription. No
+    per-call pricing, no API-specific plan and no request quota is published. API
+    access is gated by Cloudability feature permissions on the customer's tenant,
+    not by a purchased API tier.
+editions:
+  - name: Cloudability Essentials
+    price: null
+    note: >-
+      Named as a separate documentation set at
+      www.ibm.com/docs/en/cloudability-commercial/cloudability-essentials — an
+      edition boundary, not a published price point.
+  - name: Cloudability Standard
+    price: null
+    note: Separate documentation set; no published price.
+  - name: Cloudability Premium
+    price: null
+    note: Separate documentation set; no published price.
+  - name: Cloudability Federal / GovCloud
+    price: null
+    note: >-
+      FedRAMP-authorized US Government offering
+      (api.usgov.cloudability.com); no published price.
+plans: []
+evidence:
+  - url: https://www.apptio.com/products/cloudability/pricing/
+    status: 200
+    result: redirects to https://www.apptio.com/products/cloudability/contact-us/
+  - url: https://www.apptio.com/pricing/
+    status: 404
+  - url: https://www.ibm.com/products/cloudability
+    status: 301
+    result: redirects to https://www.ibm.com/products (generic product index)
+supersedes: >-
+  This file previously contained a bulk-sweep scaffold dated 2026-05-04 that
+  invented a "cloudability-free" tier with a 1,000 requests/month quota and a
+  10 requests/minute rate limit at $0.00. None of that was ever published by
+  Cloudability. It has been removed and replaced with the measured absence above
+  (method upgraded generated -> searched).

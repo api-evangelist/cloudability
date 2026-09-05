@@ -1,0 +1,73 @@
+specification: API Commons ChangeLog
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  IBM Documentation "What's new" pages under www.ibm.com/docs/en/cloudability-commercial
+  and the Cloudability Cumulative Release Notes document in the IBM TechXchange
+  Cloudability community — located 2026-09-05.
+description: >-
+  Cloudability publishes release notes, but not as a dated, machine-readable
+  changelog and not scoped to the API. Notes are split across per-year "What's
+  new" pages in IBM Docs (one page per edition: Premium, Standard, Essentials,
+  Federal) and a cumulative release-notes document in the IBM community, and IBM
+  states the notes are still mid-migration from the Apptio Help Center and IBM
+  TechXchange into IBM Docs.
+scheme: per-year-whats-new
+machine_readable: false
+feed: null
+api_scoped: false
+sources:
+  - name: IBM Cloudability documentation home ("What's new" index)
+    url: https://www.ibm.com/docs/en/cloudability-commercial
+    note: >-
+      The docs home for every Cloudability edition. Its navigation carries
+      "What's new in Cloudability Premium" plus per-year children for 2025, 2024
+      and 2023; the individual topic slugs are not recorded here because
+      www.ibm.com/docs returns 403 to non-browser clients and each slug could not
+      be confirmed first-hand.
+  - name: Cloudability Standard — What's new in 2025
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-standard/saas?topic=cloudability-standard-whats-new-in-2025
+  - name: Cloudability Cumulative Release Notes (IBM TechXchange community)
+    url: https://community.ibm.com/community/user/apptio/viewdocument/cloudability-cumulative-release-not?CommunityKey=15c0e07d-35c0-49de-a84b-019253d13376&tab=librarydocuments
+  - name: Apptio product blog
+    url: https://www.apptio.com/blog/
+    note: Feature announcements, not release notes.
+entries:
+  - date: '2026-11-19'
+    kind: deprecation
+    breaking: true
+    summary: >-
+      Announced end of functionality for the legacy Cloudability metrics-agent;
+      customers must migrate to the IBM FinOps Agent Helm chart.
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=allocation-provision-your-container-agent
+    note: A future-dated commitment published ahead of the date.
+  - date: '2026-08-21'
+    kind: release
+    breaking: false
+    version: 2.14.15
+    summary: metrics-agent 2.14.15 released (Helm chart, Docker image and Go source).
+    evidence: https://github.com/cloudability/metrics-agent/releases
+  - date: '2026-08-07'
+    kind: release
+    breaking: false
+    version: 1.0.25
+    summary: IBM FinOps Agent Helm chart 1.0.25 published (appVersion v1.0.25).
+    evidence: https://kubecost.github.io/finops-agent-chart/index.yaml
+findings:
+  - >-
+    No API changelog exists. Nothing tells a v3 consumer when an endpoint,
+    field or behaviour changed — the "What's new" pages are product-feature
+    oriented and the release notes are a PDF-style community document.
+  - >-
+    Release notes are mid-migration from the Apptio Help Center to IBM Docs,
+    and the Apptio Help Center host (help.apptio.com) no longer resolves in DNS,
+    so any older release note that was only published there is now unreachable.
+  - >-
+    entries[] is deliberately short and carries only items whose dates could be
+    read first-hand from IBM documentation or a package registry. The per-year
+    "What's new" pages were not transcribed because their individual entries
+    are undated on the page.

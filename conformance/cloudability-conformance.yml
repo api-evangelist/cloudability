@@ -1,0 +1,131 @@
+specification: API Commons Conformance
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  IBM Cloudability documentation on www.ibm.com/docs (Connect Custom Data /
+  FOCUS Ingress, FOCUS Ingress End Points, Getting started with Cloudability API
+  V3), the Apptio Trusted Platform page, and live probes of api.cloudability.com
+  — all 2026-09-05.
+description: >-
+  Standards and cross-cutting conventions the Cloudability surface does and does
+  not conform to. The load-bearing entry is FOCUS: Cloudability's cost-and-usage
+  ingestion contract is defined by the FinOps Foundation's FOCUS specification,
+  with the version declared as a REQUIRED field in the upload manifest — a
+  domain-standard signature read from the contract itself, not from a marketing
+  claim.
+conformance:
+  - id: focus
+    name: FinOps Open Cost and Usage Specification (FOCUS)
+    domain_standard: true
+    conforms: true
+    versions:
+      - '1.0'
+      - '1.1'
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-essentials/saas?topic=cloudability-connect-custom-data-focus-ingress
+    quote: >-
+      "Cloudability currently supports 1. FOCUS version 1.0 2. FOCUS version 1.1"
+      … "All custom data sources via this capability needs to adhere to the FOCUS
+      specifications" … "The version must match the exact FOCUS Spec version. e.g.
+      1.0 or 1.1"
+    contract_location: >-
+      The custom-data (BYOD) upload manifest. `focus_version` is one of only four
+      REQUIRED manifest fields (with content_type, root_dir and all_report_keys),
+      so the standard version is a mandatory part of every ingestion payload
+      rather than an optional hint.
+    api_surface:
+      - POST /v3/vendors/byod/accounts
+      - PUT /v3/vendors/byod/accounts/<accountId>
+      - GET /v3/vendors/byod/accounts
+      - GET /v3/vendors/byod/accounts/<accountId>
+      - DELETE /v3/vendors/byod/accounts/:accountId
+      - POST /v3/vendors/byod/accounts/:accountId/verification
+    evidence_secondary: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-focus-ingress-end-points
+    note: >-
+      This is the buyer-relevant distinction FOCUS exists to draw: an
+      organisation that already produces FOCUS 1.0/1.1 exports feeds Cloudability
+      with no bespoke connector. Note the gap between the ingestion contract and
+      the API reference — the FOCUS Ingress endpoint page itself names no FOCUS
+      version, so the version constraint is only discoverable on the
+      custom-data page.
+  - id: pagination
+    name: Limit/offset pagination
+    conforms: true
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+    note: >-
+      `limit` (default 50) and `offset` (default 0), used together. Partial
+      coverage — IBM states not all endpoints support pagination.
+  - id: rfc9457
+    name: RFC 9457 Problem Details for HTTP APIs
+    conforms: false
+    evidence: 'Live 401 from https://api.cloudability.com/v3, 2026-09-05'
+    note: >-
+      Errors are application/json with a vendor `error` envelope, not
+      application/problem+json. See ../errors/cloudability-problem-types.yml.
+  - id: oauth2
+    name: OAuth 2.0
+    conforms: false
+    evidence: >-
+      /.well-known/oauth-authorization-server 404s on www.ibm.com and
+      www.apptio.com and is unreadable behind a blanket 401 on
+      api.cloudability.com (2026-09-05).
+    note: >-
+      Authentication is HTTP Basic with a Cloudability API key, or the
+      apptio-opentoken header pair. No authorization server, no scopes.
+  - id: oidc
+    name: OpenID Connect
+    conforms: false
+    evidence: /.well-known/openid-configuration 404s on every readable host (2026-09-05).
+    note: >-
+      Console sign-in federates via SAML through frontdoor.apptio.com, not OIDC,
+      and in any case grants no API credential.
+  - id: idempotency
+    name: Idempotent write semantics
+    conforms: false
+    evidence: >-
+      No Idempotency-Key header or replay-protection mechanism appears anywhere
+      in the IBM Cloudability v3 API reference.
+    note: See idempotency.coverage = none in ../conventions/cloudability-conventions.yml.
+  - id: asyncapi
+    name: AsyncAPI / event-driven surface
+    conforms: false
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    note: >-
+      Not applicable rather than failed. Anomaly subscriptions deliver via
+      `{"delivery":{"method":"<email or pagerduty>"}}` — there are no customer
+      webhook URLs, no callback endpoints and no streaming surface, so there is
+      nothing for an AsyncAPI document to describe.
+  - id: rfc8594
+    name: RFC 8594 Sunset header
+    conforms: false
+    evidence: No Sunset or Deprecation header observed on api.cloudability.com (2026-09-05).
+    note: >-
+      Deprecations are announced in prose. The one dated sunset in this record
+      (metrics-agent, 2026-11-19) is published in documentation, not signalled on
+      the wire.
+  - id: soc2
+    name: SOC 2 Type II
+    conforms: true
+    evidence: https://www.apptio.com/company/trust/
+    document: https://www.apptio.com/wp-content/uploads/apptio-soc3-report.pdf
+  - id: iso27001
+    name: ISO/IEC 27001:2013
+    conforms: true
+    evidence: https://www.apptio.com/company/trust/
+    document: https://www.apptio.com/wp-content/uploads/apptio-inc-iso-27001-certificate.pdf
+  - id: fedramp
+    name: FedRAMP
+    conforms: true
+    evidence: https://www.apptio.com/fedramp/
+    note: US Government offering; API host api.usgov.cloudability.com.
+  - id: csa-star
+    name: CSA STAR Level One (CCM/CAIQ)
+    conforms: true
+    evidence: https://www.apptio.com/company/trust/
+  - id: gdpr
+    name: EU GDPR
+    conforms: true
+    evidence: https://www.apptio.com/company/data-privacy/

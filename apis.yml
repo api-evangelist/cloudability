@@ -25,7 +25,7 @@ accessModel:
   generated: '2026-07-22'
   method: derived
 created: '2026-03-27'
-modified: '2026-04-23'
+modified: '2026-09-05'
 type: Index
 access: 3rd-Party
 position: Consuming
@@ -63,6 +63,16 @@ apis:
         type: Documentation
       - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
         type: GettingStarted
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+        type: APIReference
+      - url: https://github.com/IBM/Apptio-Tools/tree/main/cloudability/postman-collection
+        type: Postman
+      - url: authentication/cloudability-authentication.yml
+        type: Authentication
+      - url: conventions/cloudability-conventions.yml
+        type: Conventions
+      - url: errors/cloudability-problem-types.yml
+        type: ErrorCatalog
     description: >-
       The Cloudability v3 API is the modern REST interface for the platform.
       It exposes resource-oriented endpoints for reporting, dimensions and
@@ -189,8 +199,6 @@ common:
     url: security/cloudability-domain-security.yml
   - type: Website
     url: https://www.apptio.com/products/cloudability/
-  - type: Portal
-    url: https://www.ibm.com/products/cloudability
   - type: Documentation
     url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
   - type: GitHub
@@ -203,9 +211,83 @@ common:
     url: rules/cloudability-rules.yml
   - type: Integrations
     url: https://www.apptio.com/company/partners/
+  - type: DeveloperPortal
+    url: https://www.ibm.com/docs/en/cloudability-commercial
+  - type: APIReference
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+  - type: GettingStarted
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+  - type: Postman
+    url: https://github.com/IBM/Apptio-Tools/tree/main/cloudability/postman-collection
+  - type: GitHubOrganization
+    url: https://github.com/cloudability
+  - type: Support
+    url: https://www.ibm.com/support/pages/node/7032143
+  - type: HelpCenter
+    url: https://community.ibm.com/community/user/groups/community-home?CommunityKey=15c0e07d-35c0-49de-a84b-019253d13376
+  - type: Blog
+    url: https://www.apptio.com/blog/
+  - type: Roadmap
+    url: https://automation-management.ideas.ibm.com/?project=CLOUDY
+  - type: SignUp
+    url: https://frontdoor.apptio.com/login
+  - type: TermsOfService
+    url: https://www.ibm.com/terms
+  - type: PrivacyPolicy
+    url: https://www.apptio.com/company/data-privacy/
+  - type: StatusPage
+    url: https://status.cloudability.com/
+  - type: Packages
+    url: packages/cloudability-packages.yml
+  - type: SDKs
+    url: packages/cloudability-packages.yml
+  - type: WellKnown
+    url: well-known/cloudability-well-known.yml
+  - type: SecurityTxt
+    url: well-known/cloudability-security.txt
+  - type: Security
+    url: security/cloudability-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/cloudability-vulnerability-disclosure.yml
+  - type: TrustCenter
+    url: security/cloudability-trust-center.yml
+  - type: Compliance
+    url: security/cloudability-trust-center.yml
+  - type: Conformance
+    url: conformance/cloudability-conformance.yml
+  - type: Authentication
+    url: authentication/cloudability-authentication.yml
+  - type: Conventions
+    url: conventions/cloudability-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cloudability-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/cloudability-lifecycle.yml
+  - type: Deprecation
+    url: lifecycle/cloudability-lifecycle.yml
+  - type: ChangeLog
+    url: changelog/cloudability-changelog.yml
+  - type: Plans
+    url: plans/cloudability-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/cloudability-rate-limits.yml
+  - type: FinOps
+    url: finops/cloudability-finops.yml
+  - type: LLMsTxt
+    url: llms/cloudability-llms.txt
+  - type: X-MCPServerCandidate
+    url: mcp/cloudability-mcp.yml
 integrations:
   - name: Apptio
   - name: ApptioCareers-Employee[1]
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-05'
+  status: enriched
+  artifacts_added: 13
+  pass: local-v3
+x-parent: apptio
+x-relationship: acquisition
+x-acquired: 2019

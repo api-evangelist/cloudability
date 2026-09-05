@@ -1,0 +1,123 @@
+specification: API Commons Authentication
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+  ("Getting started with Cloudability API V3") plus a live unauthenticated probe
+  of https://api.cloudability.com/v3 on 2026-09-05.
+description: >-
+  The Cloudability v3 API accepts two published credential styles. Neither is
+  OAuth: there is no authorization server, no scopes document and no
+  /.well-known/oauth-authorization-server on any host. Derivation from a spec was
+  not possible — Cloudability publishes no OpenAPI — so this profile is read
+  directly from IBM's own getting-started page and confirmed against the live
+  401 the API returns.
+schemes:
+  - id: cloudability-api-key
+    type: http
+    scheme: basic
+    in: header
+    name: Authorization
+    format: 'Authorization: Basic <cldy_token>'
+    description: >-
+      A Cloudability API key used as HTTP Basic credentials. IBM's documentation
+      writes the header as `Authorization: Basic <cldy_token>`; the token is
+      generated per user from the Cloudability preferences screen.
+    key_provisioning: https://app.apptio.com/cloudability#/settings/preferences
+    availability: >-
+      All commercial regions. NOT supported in US GovCloud
+      (api.usgov.cloudability.com) — that environment requires apptio-opentoken.
+    rotation: not documented
+  - id: apptio-opentoken
+    type: apiKey
+    in: header
+    name: apptio-opentoken
+    companion_header:
+      name: apptio-environmentid
+      required: true
+      description: The Apptio environment id the request is scoped to.
+    description: >-
+      The Apptio platform token, obtained from the Apptio Frontdoor Access
+      Administration API. This is the only credential accepted in every
+      environment including US GovCloud, and it is the direction of travel: IBM
+      documents that user CRUD has already moved from the Cloudability v3 Users
+      endpoint to the Apptio Frontdoor API.
+    availability: All environments, including US GovCloud.
+    rotation: not documented
+oauth:
+  supported: false
+  evidence:
+    - url: https://api.cloudability.com/.well-known/oauth-authorization-server
+      status: 401
+      note: blanket 401 on every path including a nonexistent control path
+    - url: https://www.ibm.com/.well-known/oauth-authorization-server
+      status: 404
+    - url: https://www.apptio.com/.well-known/oauth-authorization-server
+      status: 404
+  note: >-
+    End-user SSO into the Apptio Frontdoor console is SAML-based
+    (frontdoor.apptio.com issues a SAMLRequest to the customer IdP, observed live
+    on 2026-09-05 when api.apptio.com 303s to the login flow). That is console
+    sign-in, not API authorization, and grants no API token by itself.
+hosts:
+  - region: Americas (US)
+    host: api.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: US Government Cloud
+    host: api.usgov.cloudability.com
+    api_key: false
+    opentoken: true
+  - region: Australia / APAC
+    host: api-au.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: Europe
+    host: api-eu.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: Middle East
+    host: api-me.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: Canada
+    host: api-ca.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: India
+    host: api-in.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: Japan
+    host: api-jp.cloudability.com
+    api_key: true
+    opentoken: true
+  - region: Singapore
+    host: api-sg.cloudability.com
+    api_key: true
+    opentoken: true
+unauthenticated_response:
+  probed: '2026-09-05'
+  url: https://api.cloudability.com/v3
+  status: 401
+  content_type: application/json
+  www_authenticate: absent
+  body: >-
+    {"error":{"status":401,"code":"unauthorized","messages":["missing auth
+    tokens"],"uniqueid":"...","typeid":"...","traceid":"..."}}
+  note: >-
+    The 401 is returned for EVERY path on the host, including paths that do not
+    exist (control probe /zzz-does-not-exist-9482 -> 401). No WWW-Authenticate
+    challenge is emitted, so a client cannot discover the scheme from the
+    response — it has to read the documentation.
+permissions:
+  model: feature-permission
+  note: >-
+    Endpoints are gated by named Cloudability feature permissions rather than
+    OAuth scopes — for example the v3 Users endpoints require
+    "UserManagementFeatureFullAccess". IBM does not publish a consolidated
+    permission reference, so no scopes artifact is written.

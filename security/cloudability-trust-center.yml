@@ -1,0 +1,64 @@
+specification: API Commons Trust Center
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: https://www.apptio.com/company/trust/ — fetched 2026-09-05, HTTP 200.
+description: >-
+  Apptio (IBM) publishes a Trusted Platform page carrying named third-party
+  attestations for the cloud services that host Cloudability, with the
+  attestation documents themselves downloadable as PDFs from the same domain.
+trust_center:
+  url: https://www.apptio.com/company/trust/
+  http_status: 200
+  self_serve: false
+  note: >-
+    A static marketing/compliance page with direct PDF links, not a gated trust
+    portal (no Vanta/Drata/SafeBase request flow). The SOC 3 report and the ISO
+    27001 certificate are downloadable without a login; the SOC 2 Type II report
+    itself is not published.
+certifications:
+  - name: SOC 2 Type II
+    status: attested
+    evidence: https://www.apptio.com/company/trust/
+    document: https://www.apptio.com/wp-content/uploads/apptio-soc3-report.pdf
+    document_status: 200
+    document_type: application/pdf
+    note: >-
+      The public artifact is the SOC 3 report; the SOC 2 Type II report is
+      referenced on the page but is not publicly downloadable.
+  - name: ISO/IEC 27001:2013
+    status: certified
+    evidence: https://www.apptio.com/company/trust/
+    document: https://www.apptio.com/wp-content/uploads/apptio-inc-iso-27001-certificate.pdf
+    document_status: 200
+    document_type: application/pdf
+  - name: FedRAMP
+    status: authorized
+    evidence: https://www.apptio.com/fedramp/
+    document_status: 200
+    note: >-
+      Applies to the US Government offering; the corresponding API host is
+      api.usgov.cloudability.com, which IBM documents as not supporting
+      Cloudability API keys (apptio-opentoken only).
+  - name: Cloud Security Alliance STAR Level One
+    status: self-assessed
+    evidence: https://www.apptio.com/company/trust/
+    registry: https://cloudsecurityalliance.org/star/#_registry
+    note: CSA CAIQ / Cloud Controls Matrix response.
+  - name: EU GDPR
+    status: compliance-claimed
+    evidence: https://www.apptio.com/company/data-privacy/
+  - name: CCPA
+    status: compliance-claimed
+    evidence: https://www.apptio.com/company/trust/
+  - name: EU-US Privacy Shield
+    status: legacy
+    evidence: https://www.apptio.com/company/trust/
+    note: >-
+      Still listed on the Apptio trust page although the Privacy Shield framework
+      was invalidated by Schrems II in 2020 and superseded by the EU-US Data
+      Privacy Framework. Recorded verbatim as published; flagged as stale.
+security_contact: infosec@apptio.com

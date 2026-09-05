@@ -1,0 +1,200 @@
+specification: API Commons Conventions
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  IBM Cloudability API documentation on www.ibm.com/docs (getting started, users
+  end point, anomaly detection end point, FOCUS ingress end points), the
+  first-party Postman collections in github.com/IBM/Apptio-Tools, and a live
+  unauthenticated probe of api.cloudability.com — all 2026-09-05.
+description: >-
+  Cross-cutting runtime semantics for the Cloudability v3 API: how a client
+  authenticates, pages, sorts, filters, reads the response envelope, recognises
+  an error and — critically for an agent — what it cannot undo. Derived from
+  prose documentation rather than a machine-readable contract, because
+  Cloudability publishes no OpenAPI.
+auth:
+  style: http-basic-api-key OR apptio-opentoken header
+  detail: see ../authentication/cloudability-authentication.yml
+  challenge_on_401: false
+base_url:
+  primary: https://api.cloudability.com/v3
+  regional: true
+  note: >-
+    Nine regional hosts share one path structure; the region is chosen by
+    hostname, not by a header or path segment.
+response_envelope:
+  shape: '{ "result": {} | [], "meta": {} }'
+  source: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+  note: >-
+    Every successful v3 response wraps the payload in `result` with sibling
+    `meta`. Collections return an array in `result`; single resources return an
+    object.
+content_negotiation:
+  default: application/json
+  alternatives:
+    - text/csv
+  note: Cost reporting responses can be requested as CSV via the Accept header.
+pagination:
+  style: limit-offset
+  params:
+    limit:
+      default: 50
+      description: Records per page.
+    offset:
+      default: 0
+      description: Records to skip. Must be used together with limit.
+  cursor: false
+  coverage: partial
+  note: >-
+    IBM states plainly that "not all endpoints support pagination" — a client
+    cannot assume limit/offset works and has no machine-readable way to find out
+    which endpoints honour it.
+sorting:
+  param: sort
+  syntax: 'sort=+attribute (ascending) | sort=-attribute (descending)'
+filtering:
+  param: filter
+  syntax: 'filter=<name> <operator> <expression>'
+  operators:
+    - '=='
+    - '!='
+    - '>'
+    - '<'
+    - '=@'
+    - '!=@'
+field_expansion:
+  supported: false
+  note: No sparse-fieldset or expand parameter is documented.
+metadata:
+  supported: false
+  note: >-
+    No free-form metadata bag on resources. Business Mappings serve the
+    equivalent role by defining rule-based allocation dimensions.
+request_id_tracing:
+  request_headers: []
+  response_headers:
+    - x-cldy-req-id
+    - x-cldy-trace-id
+    - x-tron-sidecar-request-id
+  body_fields:
+    - error.uniqueid
+    - error.traceid
+    - error.typeid
+  observed: '2026-09-05'
+  note: >-
+    Observed live on the unauthenticated 401 from https://api.cloudability.com/v3.
+    The API emits correlation ids on both the headers and the error body, but IBM
+    does not document them, so a client has to discover them by observation. No
+    client-supplied request-id header is accepted or documented.
+versioning:
+  scheme: url-path-major
+  current: v3
+  previous: v1
+  note: >-
+    Major version in the path (/v3). v1 remains reachable at
+    https://app.cloudability.com/api/v1 with an api_key query parameter. No
+    date-based or header-based versioning, and no minor-version signalling — an
+    additive change inside v3 is invisible to a client.
+error_envelope:
+  format: vendor-json
+  rfc9457: false
+  shape: '{ "error": { "status": <int>, "code": "<slug>", "messages": ["..."], "uniqueid": "...", "typeid": "...", "traceid": "..." } }'
+  content_type: application/json
+  detail: see ../errors/cloudability-problem-types.yml
+rate_limit_signaling:
+  headers: []
+  documented: false
+  observed: false
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appears on any observed
+    api.cloudability.com response, and IBM publishes no rate-limit numbers. See
+    ../rate-limits/cloudability-rate-limits.yml. IBM's own Apptio-Tools scripts
+    ship a `-delay` parameter because "for large numbers of accounts, you may hit
+    rate limits" — so limits exist and are simply undocumented.
+idempotency:
+  coverage: none
+  header: null
+  scope: []
+  retention: null
+  note: >-
+    No Idempotency-Key header, no client-supplied request id, and no replay
+    protection is documented anywhere in the Cloudability v3 API reference. The
+    mutating surface is substantial — POST/PUT/DELETE on business mappings,
+    business metrics, anomaly subscriptions, views, budgets, users and vendor
+    credentials — and a retried write on any of it is a second write. Recorded as
+    `none` rather than `na` because the API is not read-only.
+reversibility:
+  grade: documented
+  na: false
+  note: >-
+    Cloudability's write surface is configuration rather than money movement, and
+    the reversal path for almost all of it is the ordinary DELETE or PUT on the
+    same resource. What is missing is any stated WINDOW — no documentation page
+    reviewed states a retention period, an undo horizon, a soft-delete grace
+    period or a restore endpoint. Grade is therefore `documented` (a reversal
+    path exists) and not `verified` (no window is published). No window is
+    asserted here because none is published.
+  surfaces:
+    - write: POST /v3/anomaly-subscriptions
+      reversal: DELETE /v3/anomaly-subscriptions/:subscriptionId
+      window: null
+      window_source: null
+      evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    - write: PUT /v3/anomaly-subscriptions/:subscriptionId
+      reversal: PUT /v3/anomaly-subscriptions/:subscriptionId
+      binding: restore-by-rewrite
+      window: null
+      window_source: null
+      note: >-
+        An update overwrites in place. Reverting means re-PUTting the previous
+        body, which the caller must have retained — the API returns no prior
+        version and offers no history endpoint.
+      evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    - write: POST /v3/business-mappings
+      reversal: DELETE /v3/business-mappings/:index
+      window: null
+      window_source: null
+      note: >-
+        Business mappings drive cost allocation across the whole billing dataset.
+        Deleting or reordering statements changes historical showback figures and
+        no undo or version-history endpoint is documented.
+      evidence: https://raw.githubusercontent.com/IBM/Apptio-Tools/main/cloudability/postman-collection/Cloudability.postman_collection.json.example
+    - write: POST /v3/vendors/byod/accounts
+      reversal: DELETE /v3/vendors/byod/accounts/:accountId
+      window: null
+      window_source: null
+      companion: POST /v3/vendors/byod/accounts/:accountId/verification
+      note: >-
+        Databricks credentials additionally support
+        POST /v3/vendors/databricks/accounts/:accountId/archive — an archive
+        rather than a delete, but no restore-from-archive operation or retention
+        period is documented.
+      evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-focus-ingress-end-points
+    - write: PUT /v3/users/:userId
+      reversal: PUT /v3/users/:userId
+      binding: restore-by-rewrite
+      window: null
+      window_source: null
+      note: >-
+        Partially superseded — IBM states user CRUD "are now managed in Apptio's
+        Frontdoor API", so an agent reverting a user change may need a different
+        API than the one it used to make it.
+      evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-users-end-point
+dry_run_mode:
+  supported: false
+  na: false
+  note: >-
+    No preview/dry-run/validate parameter is documented on any mutating endpoint.
+    The closest thing is Business Mappings' preview of an allocation against
+    billing data, which previews the READ result of a mapping rather than
+    rehearsing the write.
+cross_links:
+  authentication: ../authentication/cloudability-authentication.yml
+  errors: ../errors/cloudability-problem-types.yml
+  lifecycle: ../lifecycle/cloudability-lifecycle.yml
+  rate_limits: ../rate-limits/cloudability-rate-limits.yml
+  conformance: ../conformance/cloudability-conformance.yml

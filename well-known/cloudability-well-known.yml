@@ -1,0 +1,213 @@
+specification: API Commons Well-Known
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: probed
+source: >-
+  Live anonymous GET of eight /.well-known/ paths against every host this record
+  names — the registrable domain and www, each apis[].baseURL host, the console
+  host and the documentation host — on 2026-09-05.
+description: >-
+  Well-known discovery probe for the Cloudability / IBM Apptio hosts. Exactly one
+  real document was served: IBM's corporate PSIRT security.txt on www.ibm.com,
+  the documentation host for every Cloudability API entry in this record. No
+  cloudability.com or apptio.com host serves any well-known document. Two false
+  positives were rejected and are recorded below with the reason.
+notes:
+  - >-
+    api.cloudability.com answers 401 with a JSON error envelope on EVERY path,
+    including a control probe for a path that does not exist
+    (/zzz-does-not-exist-9482 -> 401). The 401s below therefore carry no
+    information about whether a document exists; they are a blanket auth wall.
+  - >-
+    app.cloudability.com answers 200 with the same SPA HTML shell
+    (<title>Cloudability</title>) for every /.well-known/* path. Per the pipeline
+    rule a 200 returning an SPA shell is NOT a document; all eight are recorded
+    as misses.
+  - >-
+    www.ibm.com/.well-known/security.txt is IBM's corporate PSIRT document, not a
+    Cloudability-specific one. It is recorded because www.ibm.com is the
+    documentation host named by every apis[] entry in this record and IBM is the
+    owner of the Cloudability product; the disclosure route it publishes is the
+    route a Cloudability researcher is expected to use.
+hosts:
+  - host: cloudability.com
+    note: 301 redirect to www.apptio.com on every well-known path.
+    documents:
+      - path: /.well-known/security.txt
+        status: 301
+      - path: /.well-known/openid-configuration
+        status: 301
+      - path: /.well-known/oauth-authorization-server
+        status: 301
+      - path: /.well-known/oauth-protected-resource
+        status: 301
+      - path: /.well-known/api-catalog
+        status: 301
+      - path: /.well-known/ai-plugin.json
+        status: 301
+      - path: /.well-known/agent-card.json
+        status: 301
+      - path: /.well-known/agent.json
+        status: 301
+  - host: www.cloudability.com
+    note: 301 redirect to https://www.apptio.com/products/cloudability/ on every path.
+    documents:
+      - path: /.well-known/security.txt
+        status: 301
+      - path: /.well-known/openid-configuration
+        status: 301
+      - path: /.well-known/oauth-authorization-server
+        status: 301
+      - path: /.well-known/oauth-protected-resource
+        status: 301
+      - path: /.well-known/api-catalog
+        status: 301
+      - path: /.well-known/ai-plugin.json
+        status: 301
+      - path: /.well-known/agent-card.json
+        status: 301
+      - path: /.well-known/agent.json
+        status: 301
+  - host: api.cloudability.com
+    note: >-
+      Blanket 401 (application/json error envelope) on all paths including a
+      nonexistent control path. No inference possible.
+    documents:
+      - path: /.well-known/security.txt
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/oauth-protected-resource
+        status: 401
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/ai-plugin.json
+        status: 401
+      - path: /.well-known/agent-card.json
+        status: 401
+      - path: /.well-known/agent.json
+        status: 401
+  - host: app.cloudability.com
+    note: >-
+      SPA catch-all: HTTP 200 text/html shell on every path. Treated as a miss,
+      not a served document.
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        result: spa-shell
+      - path: /.well-known/openid-configuration
+        status: 200
+        result: spa-shell
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        result: spa-shell
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        result: spa-shell
+      - path: /.well-known/api-catalog
+        status: 200
+        result: spa-shell
+      - path: /.well-known/ai-plugin.json
+        status: 200
+        result: spa-shell
+      - path: /.well-known/agent-card.json
+        status: 200
+        result: spa-shell
+      - path: /.well-known/agent.json
+        status: 200
+        result: spa-shell
+  - host: apptio.com
+    note: 302 redirect to www.apptio.com on every path.
+    documents:
+      - path: /.well-known/security.txt
+        status: 302
+      - path: /.well-known/openid-configuration
+        status: 302
+      - path: /.well-known/oauth-authorization-server
+        status: 302
+      - path: /.well-known/oauth-protected-resource
+        status: 302
+      - path: /.well-known/api-catalog
+        status: 302
+      - path: /.well-known/ai-plugin.json
+        status: 302
+      - path: /.well-known/agent-card.json
+        status: 302
+      - path: /.well-known/agent.json
+        status: 302
+  - host: www.apptio.com
+    note: WordPress 404 page on every path. No well-known documents published.
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: www.ibm.com
+    note: >-
+      Documentation host for every Cloudability API entry. Serves a real
+      text/plain security.txt (IBM PSIRT). The OAuth/OIDC/api-catalog paths 301
+      to a trailing-slash URL that then 404s.
+    documents:
+      - path: /.well-known/security.txt
+        status: 200
+        content_type: text/plain
+        file: cloudability-security.txt
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+      - path: /.well-known/oauth-protected-resource
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+  - host: api.apptio.com
+    note: >-
+      303 redirect to frontdoor.apptio.com/login on every path — the Apptio
+      Frontdoor SSO gate.
+    documents:
+      - path: /.well-known/security.txt
+        status: 303
+      - path: /.well-known/openid-configuration
+        status: 303
+      - path: /.well-known/oauth-authorization-server
+        status: 303
+      - path: /.well-known/oauth-protected-resource
+        status: 303
+      - path: /.well-known/api-catalog
+        status: 303
+      - path: /.well-known/ai-plugin.json
+        status: 303
+      - path: /.well-known/agent-card.json
+        status: 303
+      - path: /.well-known/agent.json
+        status: 303
+agent_card:
+  found: false
+  note: >-
+    No A2A agent card. /.well-known/agent-card.json and the legacy
+    /.well-known/agent.json were probed on all eight hosts; the only 200s were
+    app.cloudability.com's SPA catch-all, which returns HTML rather than an
+    AgentCard object. No a2a/ artifact is written.

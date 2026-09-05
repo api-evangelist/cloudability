@@ -1,0 +1,86 @@
+specification: API Commons Error Catalog
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: probed
+source: >-
+  Live unauthenticated request to https://api.cloudability.com/v3 on 2026-09-05
+  (the only error shape Cloudability exposes without credentials), cross-read
+  against the IBM Cloudability v3 API documentation on www.ibm.com/docs.
+description: >-
+  Cloudability v3 returns a vendor-specific JSON error envelope. It is NOT
+  RFC 9457 problem+json — the media type is application/json and the fields are
+  Cloudability's own. Only the 401 shape could be captured first-hand because
+  every path on the API host is behind the same auth wall; the remaining entries
+  are recorded as unverified rather than invented.
+format: vendor-json
+rfc9457: false
+media_type: application/json
+envelope:
+  root: error
+  fields:
+    - name: status
+      type: integer
+      description: Repeats the HTTP status code inside the body.
+    - name: code
+      type: string
+      description: Machine-readable error slug, e.g. "unauthorized".
+    - name: messages
+      type: array[string]
+      description: Human-readable messages. Plural — an error can carry several.
+    - name: uniqueid
+      type: string
+      description: Per-response identifier for support correlation.
+    - name: typeid
+      type: string
+      description: Stable hash identifying the error type.
+    - name: traceid
+      type: string
+      description: Distributed trace identifier.
+problem_types:
+  - status: 401
+    code: unauthorized
+    title: Missing or invalid credentials
+    verified: true
+    observed: '2026-09-05'
+    example: >-
+      {"error":{"status":401,"code":"unauthorized","messages":["missing auth
+      tokens"],"uniqueid":"11061b1a-a962-11f1-81d3-fe93748463f1","typeid":"7e7c50a0a0b0c384b42dd6e9b57c533d","traceid":"11060f1d-a962-11f1-81d3-fe93748463f1"}}
+    remediation: >-
+      Send either `Authorization: Basic <cldy_token>` or the pair
+      `apptio-opentoken` + `apptio-environmentid`. No WWW-Authenticate header is
+      returned, so the scheme cannot be discovered from the response.
+    note: >-
+      Returned for EVERY path on api.cloudability.com, including paths that do
+      not exist. A 401 from this API is therefore not evidence that the requested
+      resource exists.
+  - status: 403
+    code: forbidden
+    title: Authenticated but lacking the required feature permission
+    verified: false
+    remediation: >-
+      Grant the named Cloudability feature permission for the endpoint — for
+      example "UserManagementFeatureFullAccess" on the v3 Users endpoints.
+    note: >-
+      Inferred from IBM's documented per-endpoint permission requirements, not
+      observed. Recorded as unverified.
+  - status: 429
+    code: null
+    title: Rate limited
+    verified: false
+    remediation: Back off and retry; no Retry-After header has been observed.
+    note: >-
+      IBM publishes no rate limits and no 429 documentation, but its own
+      Apptio-Tools scripts ship a `-delay` flag because "for large numbers of
+      accounts, you may hit rate limits". The existence of throttling is
+      first-party evidence; the status code, body and headers are not published
+      and are NOT asserted here.
+unverifiable:
+  - >-
+    4xx/5xx catalogues could not be derived from a contract: Cloudability
+    publishes no OpenAPI, so there are no documented response objects to read.
+  - >-
+    The auth wall on api.cloudability.com prevents observing any error other than
+    401 without customer credentials.

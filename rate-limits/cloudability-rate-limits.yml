@@ -4,120 +4,68 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Cloudability
 providerId: cloudability
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  IBM Cloudability v3 API documentation on www.ibm.com/docs, the
+  github.com/IBM/Apptio-Tools README, and a live unauthenticated response from
+  https://api.cloudability.com/v3 — all 2026-09-05.
 tags:
   - Cloud Cost Management
-  - Cost Optimization
   - FinOps
-  - Multi-Cloud
-  - Recommendations
-  - Reporting
   - Rate Limiting
-  - Quotas
   - Throttling
-description: Machine-readable rate limit definitions for the Cloudability API surface. Captures per-tier
-  quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to
-  be replaced with published provider limits.
+description: >-
+  Cloudability throttles its API but publishes no limits. IBM's own tooling
+  concedes throttling exists — the Apptio-Tools scripts ship a `-delay`
+  parameter for exactly this reason — yet no number, window, scope, response
+  code or response header is documented anywhere in the v3 API reference, and no
+  rate-limit header appears on live responses.
+limit_count: 0
+documented: false
+limits: []
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+  limit: null
+  remaining: null
+  reset: null
+  retryAfter: null
+  policy: null
+  observed: []
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header was present on the live
+    401 from https://api.cloudability.com/v3 (2026-09-05). The response carried
+    only correlation headers: x-cldy-req-id, x-cldy-trace-id and
+    x-tron-sidecar-request-id. An authenticated 2xx could in principle carry
+    rate-limit headers, but that cannot be observed without customer credentials.
 responseCodes:
-  throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
-limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - Cloudability API v3
-      - Cloudability API v1 (Legacy)
-      - Cloudability Reporting API
-      - Cloudability Business Mappings API
-      - Cloudability Rightsizing Recommendations API
-      - Cloudability Anomaly Detection API
-      - Cloudability Vendor Credentials API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Cloudability API v3
-      - Cloudability API v1 (Legacy)
-      - Cloudability Reporting API
-      - Cloudability Business Mappings API
-      - Cloudability Rightsizing Recommendations API
-      - Cloudability Anomaly Detection API
-      - Cloudability Vendor Credentials API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - Cloudability API v3
-      - Cloudability API v1 (Legacy)
-      - Cloudability Reporting API
-      - Cloudability Business Mappings API
-      - Cloudability Rightsizing Recommendations API
-      - Cloudability Anomaly Detection API
-      - Cloudability Vendor Credentials API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Cloudability API v3
-      - Cloudability API v1 (Legacy)
-      - Cloudability Reporting API
-      - Cloudability Business Mappings API
-      - Cloudability Rightsizing Recommendations API
-      - Cloudability Anomaly Detection API
-      - Cloudability Vendor Credentials API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - Cloudability API v3
-      - Cloudability API v1 (Legacy)
-      - Cloudability Reporting API
-      - Cloudability Business Mappings API
-      - Cloudability Rightsizing Recommendations API
-      - Cloudability Anomaly Detection API
-      - Cloudability Vendor Credentials API
-policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+  throttled: null
+  note: >-
+    IBM documents no 429 behaviour for the Cloudability v3 API. The status code
+    returned on exhaustion is NOT asserted here.
+evidence:
+  - claim: Throttling exists
+    source: https://github.com/IBM/Apptio-Tools
+    quote: >-
+      "for large numbers of accounts, you may hit rate limits - use the -delay
+      parameter"
+    note: First-party acknowledgement, from IBM's own example scripts.
+  - claim: No published limits
+    source: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+    note: >-
+      The getting-started page covers auth, pagination, sorting and filtering and
+      says nothing about rate limits. Per-endpoint pages reviewed (users, anomaly
+      detection, FOCUS ingress) document no limits either.
+  - claim: Unrelated limits exist on a different host
+    source: https://api.apptio.com/
+    observed: 'x-ratelimit-limit: 400, 400;w=1 (2026-09-05)'
+    note: >-
+      Recorded so it is not later mistaken for a Cloudability API limit. These
+      headers come from the Apptio Frontdoor login gate at frontdoor.apptio.com,
+      not from api.cloudability.com, and they govern sign-in traffic.
+supersedes: >-
+  This file previously contained a bulk-sweep scaffold dated 2026-05-04 asserting
+  a free tier of 10 requests/minute with a burst of 20 and a full set of
+  X-RateLimit-* response headers. Cloudability publishes none of that. It has
+  been removed and replaced with the measured absence above (method upgraded
+  generated -> searched).

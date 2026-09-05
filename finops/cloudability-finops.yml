@@ -4,8 +4,17 @@ alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
   dataSpec: FOCUS
-  dataSpecVersion: '1.3'
-  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+  dataSpecVersion: '1.1'
+  dataSpecVersionsSupported:
+    - '1.0'
+    - '1.1'
+  dataSpecUrl: https://focus.finops.org/
+  dataSpecSource: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-essentials/saas?topic=cloudability-connect-custom-data-focus-ingress
+  dataSpecNote: >-
+    Corrected 2026-09-05 from a bulk-sweep scaffold value of '1.3', which
+    Cloudability never claimed. IBM's own custom-data page states: "Cloudability
+    currently supports 1. FOCUS version 1.0 2. FOCUS version 1.1" and requires a
+    matching `focus_version` field in every upload manifest.
 provider: Cloudability
 providerId: cloudability
 publisherName: Cloudability

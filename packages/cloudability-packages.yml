@@ -1,0 +1,168 @@
+specification: API Commons Packages
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: searched
+source: >-
+  Registry metadata read live 2026-09-05 from api.github.com (cloudability + IBM
+  orgs), the Helm chart indexes at cloudability.github.io/metrics-agent and
+  kubecost.github.io/finops-agent-chart, hub.docker.com, proxy.golang.org,
+  registry.npmjs.org, rubygems.org and pypi.org. Cloudability is an IBM Apptio
+  product, so first-party code is published under both the github.com/cloudability
+  and github.com/IBM organizations.
+description: >-
+  Client libraries, agents and deployment artifacts for the Cloudability API
+  surface. Cloudability publishes no conventional REST SDK for the v3 API in any
+  language registry; its first-party published software is the Kubernetes
+  metrics/FinOps collection agent (Go, Helm, Docker) and a small Python helper
+  library used by IBM's own example scripts. The three registry packages that
+  carry the Cloudability name on npm, RubyGems and PyPI are unmaintained
+  third-party wrappers, not vendor SDKs.
+packages:
+  - name: metrics-agent
+    kind: agent
+    language: Go
+    official: true
+    registry: helm
+    registry_url: https://cloudability.github.io/metrics-agent
+    repository: https://github.com/cloudability/metrics-agent
+    docs: https://cloudability.github.io/metrics-agent/
+    license: Apache-2.0
+    version: 2.14.15
+    published: '2026-08-21'
+    note: >-
+      Helm chart index entry `metrics-agent`, appVersion 2.14.15, created
+      2026-08-21T19:42:10Z. First-party: published from the cloudability GitHub
+      org with homepage https://www.cloudability.com/. DEPRECATED — IBM
+      documentation states the legacy metrics agent "will reach end of
+      functionality on November 19, 2026"; the migration target is the IBM
+      FinOps Agent below.
+  - name: cloudability/metrics-agent
+    kind: container
+    language: Go
+    official: true
+    registry: docker
+    registry_url: https://hub.docker.com/r/cloudability/metrics-agent
+    repository: https://github.com/cloudability/metrics-agent
+    license: Apache-2.0
+    version: 2.14.15
+    published: '2026-08-21'
+    note: >-
+      Docker Hub tag 2.14.15 last updated 2026-08-21T19:41:34Z (`latest` moved
+      the same day). Same deprecation as the Helm chart.
+  - name: github.com/cloudability/metrics-agent
+    kind: library
+    language: Go
+    official: true
+    registry: go
+    registry_url: https://proxy.golang.org/github.com/cloudability/metrics-agent/@latest
+    repository: https://github.com/cloudability/metrics-agent
+    license: Apache-2.0
+    version: v0.0.0-20260821191137-3bbc20444f7d
+    published: '2026-08-21'
+    note: >-
+      The Go module proxy resolves only a pseudo-version because the repository
+      tags releases as `metrics-agent-2.14.15` rather than a bare semver tag, so
+      `go get` consumers cannot select a released version by number. Recorded as
+      published because the underlying commit is dated 2026-08-21T19:11:37Z.
+  - name: finops-agent
+    kind: agent
+    language: Go
+    official: true
+    registry: helm
+    registry_url: https://kubecost.github.io/finops-agent-chart
+    repository: https://github.com/kubecost/finops-agent-chart
+    license: unknown
+    version: 1.0.25
+    published: '2026-08-07'
+    note: >-
+      The IBM FinOps Agent — the stated replacement for the deprecated
+      Cloudability metrics-agent. Helm chart index entry `finops-agent`,
+      appVersion v1.0.25, created 2026-08-07T18:58:30Z. Different-domain
+      justification — it is published under the kubecost GitHub org because
+      Kubecost is an IBM company and the agent is the shared collector for both
+      Kubecost and Cloudability; IBM's own Cloudability documentation instructs
+      customers to `helm repo add ibm-finops https://kubecost.github.io/finops-agent-chart`.
+  - name: Apptio-Tools-Lib
+    kind: sdk
+    language: Python
+    official: true
+    registry: git
+    registry_url: https://github.com/IBM/Apptio-Tools-Lib
+    repository: https://github.com/IBM/Apptio-Tools-Lib
+    license: Apache-2.0
+    version: null
+    published: null
+    note: >-
+      First-party Python helper library for the Cloudability and Apptio APIs,
+      published in the IBM GitHub org and installed with
+      `pip install git+https://github.com/ibm/apptio-tools-lib.git`. version and
+      published are null because the library is distributed from git only — it
+      is absent from PyPI (404 on pypi.org/pypi/apptio-tools-lib/json) and
+      carries no release tags, so a consumer cannot pin a version. Repository
+      last pushed 2026-05-13T21:39:10Z.
+  - name: Apptio-Tools
+    kind: examples
+    language: Python
+    official: true
+    registry: git
+    registry_url: https://github.com/IBM/Apptio-Tools
+    repository: https://github.com/IBM/Apptio-Tools
+    license: Apache-2.0
+    version: null
+    published: null
+    note: >-
+      IBM's collection of Cloudability API automation scripts (account groups,
+      business mappings, hierarchical business mappings, views) plus the two
+      public Postman collections. Git-only distribution, no registry release and
+      no tags, so version/published are null. Last pushed 2026-03-20T21:06:24Z.
+  - name: cloudability
+    kind: sdk
+    language: JavaScript
+    official: false
+    registry: npm
+    registry_url: https://registry.npmjs.org/cloudability
+    repository: https://github.com/devinfoley/cloudability
+    version: 0.0.1
+    published: '2015-01-02'
+    note: >-
+      Third-party. "Cloudability API for Node.js" published by an individual
+      (devinfoley), one release in 2015, abandoned. Not a vendor SDK.
+  - name: cloudability
+    kind: sdk
+    language: Ruby
+    official: false
+    registry: rubygems
+    registry_url: https://rubygems.org/gems/cloudability
+    version: 0.2.1
+    published: '2015-11-02'
+    note: >-
+      Third-party Ruby wrapper, last released 2015-11-02, 11,194 downloads.
+      Predates the v3 API entirely and targets the legacy v1 surface.
+  - name: cloudability-api
+    kind: sdk
+    language: Python
+    official: false
+    registry: pypi
+    registry_url: https://pypi.org/pypi/cloudability-api/json
+    version: 0.0.1
+    published: '2025-07-27'
+    note: >-
+      Third-party. Its own PyPI project_urls still point at the packaging
+      template placeholder https://github.com/yourusername/cloudability-api, so
+      there is no reachable source repository. Not a vendor SDK.
+findings:
+  - >-
+    No first-party REST SDK exists for the Cloudability v3 API in any language
+    registry. IBM ships example scripts and a git-only Python helper library
+    instead, and points API consumers at two Postman collections.
+  - >-
+    Every first-party package that IS published is a Kubernetes cost-collection
+    agent rather than an API client, and the flagship one (metrics-agent) carries
+    a published end-of-functionality date of 2026-11-19.
+  - >-
+    All three registry packages bearing the Cloudability name (npm, RubyGems,
+    PyPI) are third-party and two of them have been unmaintained for a decade —
+    a consumer searching a registry for "cloudability" finds only abandoned code.
