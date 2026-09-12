@@ -277,6 +277,8 @@ common:
     url: llms/cloudability-llms.txt
   - type: X-MCPServerCandidate
     url: mcp/cloudability-mcp.yml
+  - type: DataModel
+    url: data-model/cloudability-data-model.yml
 integrations:
   - name: Apptio
   - name: ApptioCareers-Employee[1]
@@ -286,7 +288,7 @@ maintainers:
 x-enrichment:
   date: '2026-09-05'
   status: enriched
-  artifacts_added: 13
+  artifacts_added: 1
   pass: local-v3
 x-parent: apptio
 x-relationship: acquisition
