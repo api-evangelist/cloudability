@@ -47,6 +47,25 @@ www.cloudability.com 404, www.apptio.com 404, www.ibm.com 404).
 - There is NO OpenAPI, Swagger, GraphQL, AsyncAPI, gRPC or WSDL contract. Probed 2026-09-05:
   /openapi.json, /openapi.yaml, /swagger.json, /api-docs and /docs on api.cloudability.com all
   return the same blanket 401.
+- API Evangelist publishes a DERIVED entity-relationship model for this API at
+  data-model/cloudability-data-model.yml in this repo. It is transcribed from IBM's own published
+  object tables and the first-party Postman collections, not from a contract: six entities carry
+  field lists, the rest are named with empty field lists rather than guessed.
+
+## Surface size and known ambiguities
+
+- IBM's API reference publishes 29 endpoint groups. Only a handful publish an object schema, so
+  most of the surface is addressable but not describable.
+- The same resource is published at two paths by two first-party sources: the docs say
+  /v3/anomaly-subscriptions, IBM's own Postman collection says /v3/anomalies/subscriptions.
+- The docs are not self-consistent on auth: getting-started says `Authorization: Basic <cldy_token>`
+  while the Views end point page says "a valid bearer token". The 401 carries no WWW-Authenticate
+  header, so neither can be confirmed without a credential.
+- Business mappings are addressed by an `index` of 1-10 that is both the identifier and the
+  evaluation order — writes are not local, and re-ordering restates historical showback.
+- Field naming is inconsistent: /account_groups and account_group_entry_values are snake_case while
+  views and mappings are camelCase; on the View object sharedWithUsers is array[string] and
+  defaultUserIds is array[integer].
 
 ## First-party code
 

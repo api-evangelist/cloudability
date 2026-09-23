@@ -175,3 +175,46 @@ agent_readiness_note: >-
   no MCP server, no OpenAPI to generate one from, no llms.txt on any vendor host,
   no agent card, and an API host that answers 401 to every anonymous request
   including its own discovery paths.
+documented_endpoint_groups:
+  read: '2026-09-05'
+  evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+  count: 29
+  covered_by_candidate_tools: 9
+  note: >-
+    IBM's v3 API reference publishes 29 endpoint groups. The candidate tool list
+    above covers nine of them, because those are the groups whose exact paths appear
+    in a first-party source that was read first-hand (the IBM docs pages and the
+    Apptio-Tools Postman collections). The remaining twenty are recorded here by NAME
+    ONLY and deliberately produce no candidate tool: naming a tool would require
+    asserting a path, and no path is asserted that was not read. This is the size of
+    the gap a real MCP server would have to close.
+  groups_without_candidate_tools:
+    - Account Group Entries
+    - Account Groups
+    - Budgets & Forecasting
+    - Calculated Metrics
+    - Cost Reporting
+    - Resource Inventory (Public API)
+    - Cloud Sustainability
+    - Cost Sharing
+    - Snowflake
+    - MongoDB
+    - Databricks
+    - Datadog
+    - PagerDuty
+    - Governance
+    - Rightsizing ROI
+    - RI Planner
+    - RI Portfolio
+    - Scorecards
+    - User Groups and Entra ID Groups
+    - Utilization Reports
+  path_discrepancy:
+    subject: anomaly subscriptions
+    documentation: /v3/anomaly-subscriptions
+    postman_collection: /v3/anomalies/subscriptions
+    note: >-
+      Two first-party sources publish different paths for the same resource. The
+      documentation path is used in the candidate tools above. With no contract to
+      arbitrate, a client has to try one and fall back to the other.
+data_model: ../data-model/cloudability-data-model.yml

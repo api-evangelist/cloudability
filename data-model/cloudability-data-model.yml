@@ -1,0 +1,504 @@
+specification: API Commons Data Model
+specificationVersion: '0.1'
+provider: Cloudability
+providerId: cloudability
+generated: '2026-09-05'
+modified: '2026-09-05'
+method: derived
+source: >-
+  Derived 2026-09-05 from artifacts already fetched into this repo plus the IBM
+  Cloudability v3 API reference read first-hand the same day: the Business
+  Mappings, Views, Account Groups and Anomaly Detection end point pages on
+  www.ibm.com/docs, and the two first-party Postman collections in
+  github.com/IBM/Apptio-Tools (Cloudability.postman_collection.json.example and
+  Business Metrics.postman_collection.json). There is NO OpenAPI to derive from —
+  api.cloudability.com answers 401 on every discovery path — so entity fields are
+  transcribed from IBM's own published object tables and request bodies, and every
+  entity carries a confidence grade saying how it was established.
+description: >-
+  The entity-relationship graph behind the Cloudability v3 API. Cloudability's
+  data model is unusual for a SaaS API: the primary objects are not records of
+  business events but RULES that reshape a billing dataset — a Business Mapping is
+  an ordered list of match/value expressions that manufactures a dimension, and a
+  View is a saved filter that scopes every other resource a user can see. The View
+  is the join point of the whole model: anomaly subscriptions attach to a view,
+  sharing is expressed through a view, and access control is a view relationship
+  rather than a role on the resource.
+caveats:
+  - >-
+    No OpenAPI exists, so no field type is machine-verified. Types below are the
+    types IBM's documentation states in prose tables; where a table exists the
+    entity is graded high, where only the endpoint group is published it is graded
+    low and the fields list is deliberately empty rather than invented.
+  - >-
+    IBM's API reference lists 29 endpoint groups (see surface.documented_groups).
+    Only the five whose object tables were read first-hand are modelled as entities
+    with fields. The remaining groups are recorded as known-but-unmodelled so the
+    gap is visible rather than implied to be absent.
+  - >-
+    Two paths for the same resource appear in first-party sources: the Anomaly
+    Detection documentation publishes /v3/anomaly-subscriptions while IBM's own
+    Postman collection calls /v3/anomalies/subscriptions. The documentation is
+    treated as authoritative here and the discrepancy is recorded rather than
+    resolved, because neither can be confirmed against a contract.
+identifier_conventions:
+  - entity: BusinessMapping
+    field: index
+    shape: integer 1-10
+    note: >-
+      Not an opaque id — the identifier IS the slot. A tenant has at most ten
+      business dimensions and the index doubles as the position, so creating an
+      eleventh has nowhere to go and re-indexing changes which mapping a URL
+      addresses.
+  - entity: AccountGroup
+    field: id
+    shape: number
+    note: Carries a separate `position` field, so identity and ordering are decoupled here.
+  - entity: View
+    field: id
+    shape: string
+  - entity: AnomalySubscription
+    field: subscriptionID
+    shape: string
+  - entity: User
+    field: userId
+    shape: string
+    note: Path parameter on /v3/users/{userId}; creation and deletion have moved to the Apptio Frontdoor API.
+entities:
+  - name: BusinessMapping
+    kind: BUSINESS_DIMENSION
+    confidence: high
+    endpoints:
+      - GET /v3/business-mappings
+      - POST /v3/business-mappings
+      - GET /v3/business-mappings/{index}
+      - PUT /v3/business-mappings/{index}
+      - DELETE /v3/business-mappings/{index}
+      - GET /v3/business-mappings/dimensions
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-business-mappings-end-point
+    description: >-
+      A rule-based dimension that allocates spend to cost centres, products,
+      environments or applications. Statements are evaluated in order and the first
+      match wins; unmatched rows fall through to defaultValue.
+    fields:
+      - name: name
+        type: string
+      - name: index
+        type: integer
+        note: 1-10, the identifier and the position.
+      - name: kind
+        type: string
+        note: Literal "BUSINESS_DIMENSION".
+      - name: defaultValue
+        type: string
+        note: Fallback value when no statement matches.
+      - name: defaultValueExpression
+        type: string
+        optional: true
+      - name: statements
+        type: array[Statement]
+  - name: BusinessMetric
+    kind: BUSINESS_METRIC
+    confidence: high
+    endpoints:
+      - GET /v3/business-mappings/metrics
+      - POST /v3/internal/business-mappings/metrics
+      - GET /v3/internal/business-mappings/{index}/metrics
+      - DELETE /v3/internal/business-mappings/{index}/metrics
+    evidence: https://raw.githubusercontent.com/IBM/Apptio-Tools/main/cloudability/postman-collection/Business%20Metrics.postman_collection.json
+    evidence_secondary: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-business-mappings-end-point
+    description: >-
+      The numeric sibling of a Business Mapping: statements resolve to a computed
+      number (for example Savings Plan coverage percentage, or a currency
+      conversion) rather than to a label.
+    fields:
+      - name: name
+        type: string
+      - name: kind
+        type: string
+        note: Literal "BUSINESS_METRIC".
+      - name: numberFormat
+        type: string
+        enum: [currency, number]
+      - name: defaultValueExpression
+        type: string
+      - name: preMatchExpression
+        type: string
+        optional: true
+        note: Evaluated once before the statements, as a shared guard.
+      - name: statements
+        type: array[Statement]
+    note: >-
+      The read path is published under /v3/business-mappings/metrics while the write
+      paths in IBM's own Postman collection go to /v3/internal/business-mappings/metrics.
+      A consumer is therefore being asked to POST to a path IBM labels `internal`.
+  - name: Statement
+    confidence: high
+    embedded_in:
+      - BusinessMapping
+      - BusinessMetric
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-business-mappings-end-point
+    description: >-
+      One rule in an ordered list. Expressions are written in Cloudability's own
+      Business Mapping Expression Language over DIMENSION[...] and METRIC[...]
+      references — a domain-specific language with no schema and no validator
+      endpoint, so a malformed expression is only discoverable by writing it.
+    fields:
+      - name: matchExpression
+        type: string
+      - name: valueExpression
+        type: string
+  - name: View
+    confidence: high
+    endpoints:
+      - GET /v3/views
+      - POST /v3/views
+      - GET /v3/views/{viewId}
+      - PUT /v3/views/{viewId}
+      - DELETE /v3/views/{viewId}
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-views-end-point
+    description: >-
+      A saved, shareable filter over the billing dataset. Views are the access
+      control primitive of the platform — what a user can see is the set of views
+      shared with them — and they nest, so a child view inherits its parent's scope.
+    fields:
+      - name: id
+        type: string
+      - name: title
+        type: string
+      - name: description
+        type: string
+      - name: ownerId
+        type: string
+      - name: ownerEmail
+        type: string
+      - name: sharedWithUsers
+        type: array[string]
+      - name: sharedWithOrganization
+        type: boolean
+      - name: sharedOrgUnitIDs
+        type: array[string]
+      - name: filters
+        type: array[Filter]
+      - name: parentViewId
+        type: string
+      - name: derivedUserIds
+        type: array[object]
+      - name: derivedOrgUnitIDs
+        type: array[object]
+      - name: viewSource
+        type: string
+      - name: viewSourceId
+        type: string
+      - name: mappedViewIds
+        type: array[string]
+      - name: defaultUserIds
+        type: array[integer]
+    note: >-
+      defaultUserIds is array[integer] while sharedWithUsers is array[string] on the
+      same object. Both name users. An agent building a client cannot assume one
+      user-id type across this API.
+  - name: Filter
+    confidence: low
+    embedded_in:
+      - View
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-views-end-point
+    fields: []
+    note: >-
+      Named as `array[Filter Object]` on the View page, but the Filter object's own
+      field table was not published on the pages read. Fields left empty rather than
+      guessed.
+  - name: AccountGroup
+    confidence: high
+    endpoints:
+      - GET /v3/account_groups
+      - POST /v3/account_groups
+      - GET /v3/account_groups/{id}
+      - PUT /v3/account_groups/{id}
+      - DELETE /v3/account_groups/{id}
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-account-groups-end-point
+    description: >-
+      A tag-like grouping applied to cloud accounts, used to organise spend before
+      business mappings are evaluated.
+    fields:
+      - name: id
+        type: number
+      - name: position
+        type: number
+      - name: name
+        type: string
+      - name: account_group_entry_values
+        type: array
+        note: '"An informative list of current values for the account group" — read-only here; values are written through the Account Group Entries endpoint.'
+    note: >-
+      snake_case (`account_group_entry_values`, `/account_groups`) against camelCase
+      everywhere else in v3 (`sharedWithUsers`, `matchExpression`). The naming
+      convention is not consistent across the API surface.
+  - name: AccountGroupEntry
+    confidence: low
+    endpoints:
+      - /v3/account_group_entries
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+    fields: []
+    note: >-
+      IBM's reference lists "Account Group Entries" as its own endpoint group and the
+      Account Groups page defers to it, but publishes no object schema for it. An
+      honest gap, not an absent entity.
+  - name: AnomalySubscription
+    confidence: high
+    endpoints:
+      - GET /v3/anomaly-subscriptions
+      - GET /v3/anomaly-subscriptions/all
+      - POST /v3/anomaly-subscriptions
+      - GET /v3/anomaly-subscriptions/{subscriptionId}
+      - PUT /v3/anomaly-subscriptions/{subscriptionId}
+      - DELETE /v3/anomaly-subscriptions/{subscriptionId}
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    description: >-
+      A standing alert on a view: when spend on the view breaches an absolute or
+      percentage threshold, the subscription delivers a notification.
+    fields:
+      - name: subscriptionID
+        type: string
+      - name: viewId
+        type: string
+      - name: unusualSpendThreshold
+        type: integer
+      - name: unusualPercentageThreshold
+        type: integer
+      - name: delivery
+        type: object
+        note: 'Carries the method of alerting; documented values are "email" and "pagerduty" only.'
+      - name: sharedUserIds
+        type: string
+        optional: true
+      - name: description
+        type: string
+        optional: true
+      - name: anomalyIgnoreRecord
+        type: object
+        optional: true
+    note: >-
+      The delivery object is the whole notification surface of the product, and it
+      admits no customer-supplied URL. That is why this repo emits no AsyncAPI and no
+      Webhooks pointer — there is no callback for an event document to describe.
+  - name: Anomaly
+    confidence: medium
+    endpoints:
+      - GET /v3/anomalies
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    fields: []
+    note: >-
+      The collection is documented and appears in IBM's Postman collection, but no
+      field table for the anomaly record itself was published on the pages read.
+  - name: User
+    confidence: medium
+    endpoints:
+      - GET /v3/users
+      - GET /v3/users/{userId}
+      - PUT /v3/users/{userId}
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-users-end-point
+    fields: []
+    note: >-
+      Partially superseded — IBM states "user CRUD actions are now managed in Apptio's
+      Frontdoor API", so the authoritative User entity for creation and deletion lives
+      on a different API on a different host (frontdoor.apptio.com). Requires the
+      UserManagementFeatureFullAccess feature permission.
+  - name: BYODAccount
+    confidence: medium
+    endpoints:
+      - GET /v3/vendors/byod/accounts
+      - POST /v3/vendors/byod/accounts
+      - GET /v3/vendors/byod/accounts/{accountId}
+      - PUT /v3/vendors/byod/accounts/{accountId}
+      - DELETE /v3/vendors/byod/accounts/{accountId}
+      - POST /v3/vendors/byod/accounts/{accountId}/verification
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-focus-ingress-end-points
+    description: >-
+      A bring-your-own-data cost source ingested against the FinOps Foundation FOCUS
+      specification. The associated upload manifest is the one place in this API where
+      an external standard is a required part of the payload.
+    manifest_fields:
+      - name: focus_version
+        type: string
+        required: true
+        note: 'Must be an exact FOCUS spec version — "1.0" or "1.1".'
+      - name: content_type
+        required: true
+      - name: root_dir
+        required: true
+      - name: all_report_keys
+        required: true
+    cross_reference: ../conformance/cloudability-conformance.yml
+  - name: VendorCredential
+    confidence: low
+    endpoints:
+      - /v3/vendors
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+    fields: []
+    note: >-
+      Per-vendor endpoint groups exist for AWS, Azure, GCP, OCI, IBM, Snowflake,
+      MongoDB, Databricks and Datadog. Each is documented on its own page; none was
+      read first-hand, so no fields are asserted.
+  - name: RightsizingRecommendation
+    confidence: medium
+    endpoints:
+      - GET /v3/rightsizing/aws/recommendations/ec2
+      - GET /v3/rightsizing/aws/recommendations/ebs
+      - GET /v3/rightsizing/azure/recommendations/compute
+    evidence: https://raw.githubusercontent.com/IBM/Apptio-Tools/main/cloudability/postman-collection/Cloudability.postman_collection.json.example
+    fields: []
+    note: >-
+      The resource is partitioned by vendor AND service in the path rather than by a
+      filter parameter, so the "recommendation" is not one addressable collection — a
+      client wanting every recommendation must know the full vendor/service matrix in
+      advance.
+  - name: ContainerCluster
+    confidence: medium
+    endpoints:
+      - GET /v3/containers/clusters
+      - GET /v3/containers/labels
+    evidence: https://raw.githubusercontent.com/IBM/Apptio-Tools/main/cloudability/postman-collection/Cloudability.postman_collection.json.example
+    fields: []
+    note: Requires start and end date parameters; populated by the container agent, not by the API.
+  - name: WorkloadPrediction
+    confidence: medium
+    endpoints:
+      - GET /v3/prediction/workload/instance/list
+      - GET /v3/prediction/workload/instance/search/{vendor}
+      - GET /v3/prediction/workload/placement/{id}/aws
+    evidence: https://raw.githubusercontent.com/IBM/Apptio-Tools/main/cloudability/postman-collection/Cloudability.postman_collection.json.example
+    fields: []
+relationships:
+  - from: AnomalySubscription
+    to: View
+    kind: belongs_to
+    via: viewId
+    confidence: high
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-anomaly-detection-end-point
+    note: >-
+      The load-bearing edge of the model. An alert is not defined on an account or a
+      service; it is defined on a saved filter, so deleting a view silently changes
+      what an alert watches.
+  - from: View
+    to: Filter
+    kind: has_many
+    via: filters
+    confidence: high
+  - from: View
+    to: View
+    kind: belongs_to
+    via: parentViewId
+    confidence: high
+    note: Self-referencing hierarchy; a child view narrows its parent.
+  - from: View
+    to: View
+    kind: has_many
+    via: mappedViewIds
+    confidence: medium
+  - from: View
+    to: User
+    kind: belongs_to
+    via: ownerId
+    confidence: high
+  - from: View
+    to: User
+    kind: has_many
+    via: sharedWithUsers
+    confidence: high
+  - from: View
+    to: User
+    kind: has_many
+    via: defaultUserIds
+    confidence: medium
+  - from: BusinessMapping
+    to: Statement
+    kind: has_many
+    via: statements
+    confidence: high
+  - from: BusinessMetric
+    to: Statement
+    kind: has_many
+    via: statements
+    confidence: high
+  - from: AccountGroup
+    to: AccountGroupEntry
+    kind: has_many
+    via: account_group_entry_values
+    confidence: high
+  - from: AnomalySubscription
+    to: User
+    kind: has_many
+    via: sharedUserIds
+    confidence: medium
+    note: Documented as type string rather than array, so the multiplicity is inferred from the plural name.
+  - from: BYODAccount
+    to: VendorCredential
+    kind: is_a
+    via: /v3/vendors/byod
+    confidence: high
+surface:
+  openapi: null
+  openapi_note: >-
+    No OpenAPI, Swagger or GraphQL contract is published. Probed 2026-09-05:
+    api.cloudability.com/openapi.json, /openapi.yaml, /swagger.json, /v3/openapi.json,
+    /api-docs and /docs all return HTTP 401 with the same JSON error envelope,
+    including a control path that does not exist; app.cloudability.com returns an
+    HTML SPA shell (HTTP 200) for the same paths.
+  postman:
+    - https://github.com/IBM/Apptio-Tools/tree/main/cloudability/postman-collection
+  documented_groups:
+    evidence: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+    count: 29
+    modelled_with_fields: 6
+    groups:
+      - Account Group Entries
+      - Account Groups
+      - Anomaly Detection
+      - Budgets & Forecasting
+      - Business Mappings
+      - Calculated Metrics
+      - Containers
+      - Cost Reporting
+      - Resource Inventory (Public API)
+      - Cloud Sustainability
+      - Cost Sharing
+      - Vendor Credentials (AWS, Azure, GCP, OCI, IBM)
+      - Snowflake
+      - MongoDB
+      - Databricks
+      - Datadog
+      - FOCUS Ingress
+      - PagerDuty
+      - Governance
+      - Rightsizing
+      - Rightsizing ROI
+      - RI Planner
+      - RI Portfolio
+      - Scorecards
+      - Users
+      - User Groups and Entra ID Groups
+      - Utilization Reports
+      - Views
+      - Workload Planning
+cross_links:
+  conventions: ../conventions/cloudability-conventions.yml
+  authentication: ../authentication/cloudability-authentication.yml
+  errors: ../errors/cloudability-problem-types.yml
+  conformance: ../conformance/cloudability-conformance.yml
+  mcp: ../mcp/cloudability-mcp.yml
+findings:
+  - >-
+    The View is the access-control primitive and the anchor of the alerting model,
+    which makes it the single highest-consequence object in the API: an agent that
+    deletes or re-filters a view changes both what a human can see and what an alert
+    fires on, and no reversal window is published for either.
+  - >-
+    Business mappings are addressed by a 1-10 `index` that is simultaneously their
+    identifier and their evaluation order, so a write is never local — re-ordering
+    changes which rule wins and therefore restates historical showback.
+  - >-
+    Field naming is inconsistent across the surface (snake_case account groups against
+    camelCase views and mappings; user ids typed as string in one field and integer in
+    another on the same object), and with no OpenAPI there is nothing a client can
+    generate from — every consumer hand-writes the same guesses.

@@ -121,3 +121,20 @@ permissions:
     OAuth scopes — for example the v3 Users endpoints require
     "UserManagementFeatureFullAccess". IBM does not publish a consolidated
     permission reference, so no scopes artifact is written.
+documentation_inconsistency:
+  observed: '2026-09-05'
+  note: >-
+    IBM's own v3 reference does not describe one credential consistently. The
+    getting-started page documents `Authorization: Basic <cldy_token>`, while the
+    Views end point page states that every Views operation requires "a valid bearer
+    token" in the Authorization header. No page reconciles the two, and there is no
+    OpenAPI securityScheme to settle it, so a client integrating against the Views
+    endpoints cannot tell from the documentation whether to send Basic or Bearer.
+  evidence:
+    - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+      says: 'Authorization: Basic <cldy_token>'
+    - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-views-end-point
+      says: '"a valid bearer token" in the Authorization header'
+  wire_evidence: >-
+    The live 401 from https://api.cloudability.com/v3 emits no WWW-Authenticate
+    header, so the ambiguity cannot be resolved by observation either.
