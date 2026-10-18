@@ -180,6 +180,11 @@ apis:
     name: Cloudability Vendor Credentials API
     tags:
       - AWS
+      - Microsoft Azure
+      - GCP
+      - Onboarding
+    tags_raw:
+      - AWS
       - Azure
       - GCP
       - Onboarding
