@@ -1,0 +1,300 @@
+aid: cloudability
+url: https://raw.githubusercontent.com/api-evangelist/cloudability/refs/heads/main/apis.yml
+name: Cloudability
+deliveryModel:
+  model: unknown
+  open_source: false
+  commercial: false
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - none
+  generated: '2026-08-28'
+  method: derived
+accessModel:
+  pricing: freemium
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Freemium
+  confidence: medium
+  source:
+  - plans
+  generated: '2026-07-22'
+  method: derived
+created: '2026-03-27'
+modified: '2026-09-05'
+type: Index
+access: 3rd-Party
+position: Consuming
+specificationVersion: '0.23'
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cloudability.png
+kind: company
+tags:
+  - Cloud Cost Management
+  - Cost Optimization
+  - FinOps
+  - Multi-Cloud
+  - Recommendations
+  - Reporting
+description: >-
+  Cloudability (an IBM Apptio product) is a cloud cost management and FinOps
+  platform providing cost visibility, optimization recommendations, anomaly
+  detection, and governance across AWS, Azure, Google Cloud, and other
+  multi-cloud environments. The Cloudability API v3 is REST-oriented with
+  JSON responses, HTTP basic authentication using an API token, cursor-style
+  limit/offset pagination, and operations for reporting, business mappings,
+  rightsizing recommendations, anomalies, vendor credentials, and views.
+apis:
+  - aid: cloudability:api-v3
+    name: Cloudability API v3
+    tags:
+      - Cloud Cost Management
+      - FinOps
+      - Recommendations
+      - Reporting
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+        type: Documentation
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+        type: GettingStarted
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+        type: APIReference
+      - url: https://github.com/IBM/Apptio-Tools/tree/main/cloudability/postman-collection
+        type: Postman
+      - url: authentication/cloudability-authentication.yml
+        type: Authentication
+      - url: conventions/cloudability-conventions.yml
+        type: Conventions
+      - url: errors/cloudability-problem-types.yml
+        type: ErrorCatalog
+    description: >-
+      The Cloudability v3 API is the modern REST interface for the platform.
+      It exposes resource-oriented endpoints for reporting, dimensions and
+      metrics, business mappings, anomalies, rightsizing recommendations,
+      vendor credentials, views, dashboards, and budgets. Responses default
+      to JSON (CSV available via Accept header), pagination uses limit and
+      offset together, and sort accepts +attribute / -attribute syntax.
+      Authentication uses HTTP basic auth with an API token issued from the
+      Cloudability portal.
+  - aid: cloudability:api-v1
+    name: Cloudability API v1 (Legacy)
+    tags:
+      - Cloud Cost Management
+      - FinOps
+      - Legacy
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://app.cloudability.com/api/v1
+    humanURL: https://community.ibm.com/community/user/discussion/apis-getting-started-with-cloudability-apis
+    properties:
+      - url: https://community.ibm.com/community/user/discussion/apis-getting-started-with-cloudability-apis
+        type: Documentation
+    description: >-
+      The legacy v1 API remains available for older integrations covering
+      cost reporting and dimensions. Apptio recommends migrating to v3 for
+      new integrations. v1 uses an api_key query parameter for authentication.
+  - aid: cloudability:reporting
+    name: Cloudability Reporting API
+    tags:
+      - Cost Reporting
+      - Dimensions
+      - FinOps
+      - Metrics
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3/reporting
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+        type: Documentation
+    description: >-
+      The Reporting endpoints under v3 build cost-and-usage queries against
+      Cloudability's normalized billing dataset. Callers select metrics
+      (unblended cost, amortized cost, usage_quantity), dimensions
+      (vendor, account_id, service_name, business_mapping, region), filters,
+      and date ranges to produce tabular results that can be exported as JSON
+      or CSV.
+  - aid: cloudability:business-mappings
+    name: Cloudability Business Mappings API
+    tags:
+      - Allocations
+      - Business Mappings
+      - Showback
+      - Tagging
+    tags_raw:
+      - Allocation
+      - Business Mappings
+      - Showback
+      - Tagging
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3/business-mappings
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+        type: Documentation
+    description: >-
+      Business Mappings define rule-based dimensions that allocate spend to
+      cost centers, products, environments, or applications. The API lets
+      callers list, create, update and delete mappings, manage rule order
+      and statements, and preview the resulting allocation against billing
+      data.
+  - aid: cloudability:rightsizing
+    name: Cloudability Rightsizing Recommendations API
+    tags:
+      - Cost Optimization
+      - Recommendations
+      - Rightsizing
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3/rightsizing
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+        type: Documentation
+    description: >-
+      The Rightsizing API surfaces machine-learning generated downsizing,
+      modernization and termination recommendations for AWS EC2, RDS, EBS,
+      Azure VMs and disks, and Google Compute Engine instances, including
+      estimated savings, confidence, and supporting utilization metrics.
+  - aid: cloudability:anomalies
+    name: Cloudability Anomaly Detection API
+    tags:
+      - Alerts
+      - Anomaly Detection
+      - Cost Optimization
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3/anomalies
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+        type: Documentation
+    description: >-
+      The Anomalies API exposes detected cost anomalies on dimensions such
+      as service, account, and business mapping. Callers can query open
+      anomalies, retrieve baseline / actual cost deltas, classify anomalies,
+      and acknowledge them through the API.
+  - aid: cloudability:vendor-credentials
+    name: Cloudability Vendor Credentials API
+    tags:
+      - Amazon Web Services
+      - Microsoft Azure
+      - GCP
+      - Onboarding
+    tags_raw:
+      - AWS
+      - Azure
+      - GCP
+      - Onboarding
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+    baseURL: https://api.cloudability.com/v3/vendors
+    humanURL: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+    properties:
+      - url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+        type: Documentation
+    description: >-
+      The Vendor Credentials API manages connections to AWS payer accounts,
+      Azure billing scopes, GCP billing projects, OCI tenancies and other
+      cloud vendors. It supports listing existing credentials, validating
+      connectivity, rotating secrets, and onboarding new accounts.
+common:
+  - type: DomainSecurity
+    url: security/cloudability-domain-security.yml
+  - type: Website
+    url: https://www.apptio.com/products/cloudability/
+  - type: Documentation
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas
+  - type: GitHub
+    url: https://github.com/cloudability
+  - type: Training
+    url: https://education.apptio.com/courses/ibm-cloudability-api
+  - type: JSONLD
+    url: json-ld/cloudability-context.jsonld
+  - type: Spectral
+    url: rules/cloudability-rules.yml
+  - type: Integrations
+    url: https://www.apptio.com/company/partners/
+  - type: DeveloperPortal
+    url: https://www.ibm.com/docs/en/cloudability-commercial
+  - type: APIReference
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=cloudability-api
+  - type: GettingStarted
+    url: https://www.ibm.com/docs/en/cloudability-commercial/cloudability-premium/saas?topic=api-getting-started-cloudability-v3
+  - type: Postman
+    url: https://github.com/IBM/Apptio-Tools/tree/main/cloudability/postman-collection
+  - type: GitHubOrganization
+    url: https://github.com/cloudability
+  - type: Support
+    url: https://www.ibm.com/support/pages/node/7032143
+  - type: HelpCenter
+    url: https://community.ibm.com/community/user/groups/community-home?CommunityKey=15c0e07d-35c0-49de-a84b-019253d13376
+  - type: Blog
+    url: https://www.apptio.com/blog/
+  - type: Roadmap
+    url: https://automation-management.ideas.ibm.com/?project=CLOUDY
+  - type: SignUp
+    url: https://frontdoor.apptio.com/login
+  - type: TermsOfService
+    url: https://www.ibm.com/terms
+  - type: PrivacyPolicy
+    url: https://www.apptio.com/company/data-privacy/
+  - type: StatusPage
+    url: https://status.cloudability.com/
+  - type: Packages
+    url: packages/cloudability-packages.yml
+  - type: SDKs
+    url: packages/cloudability-packages.yml
+  - type: WellKnown
+    url: well-known/cloudability-well-known.yml
+  - type: SecurityTxt
+    url: well-known/cloudability-security.txt
+  - type: Security
+    url: security/cloudability-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/cloudability-vulnerability-disclosure.yml
+  - type: TrustCenter
+    url: security/cloudability-trust-center.yml
+  - type: Compliance
+    url: security/cloudability-trust-center.yml
+  - type: Conformance
+    url: conformance/cloudability-conformance.yml
+  - type: Authentication
+    url: authentication/cloudability-authentication.yml
+  - type: Conventions
+    url: conventions/cloudability-conventions.yml
+  - type: ErrorCatalog
+    url: errors/cloudability-problem-types.yml
+  - type: Lifecycle
+    url: lifecycle/cloudability-lifecycle.yml
+  - type: Deprecation
+    url: lifecycle/cloudability-lifecycle.yml
+  - type: ChangeLog
+    url: changelog/cloudability-changelog.yml
+  - type: Plans
+    url: plans/cloudability-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/cloudability-rate-limits.yml
+  - type: FinOps
+    url: finops/cloudability-finops.yml
+  - type: LLMsTxt
+    url: llms/cloudability-llms.txt
+  - type: X-MCPServerCandidate
+    url: mcp/cloudability-mcp.yml
+  - type: DataModel
+    url: data-model/cloudability-data-model.yml
+integrations:
+  - name: Apptio
+  - name: ApptioCareers-Employee[1]
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-09-05'
+  status: enriched
+  artifacts_added: 1
+  pass: local-v3
+x-parent: apptio
+x-relationship: acquisition
+x-acquired: 2019
