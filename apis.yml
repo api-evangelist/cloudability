@@ -13,16 +13,18 @@ deliveryModel:
   generated: '2026-08-28'
   method: derived
 accessModel:
-  pricing: freemium
+  pricing: unknown
   onboarding: unknown
   trial: false
   try_now: false
   public: false
-  label: Freemium
-  confidence: medium
+  label: Unknown
+  confidence: low
   source:
-  - plans
-  generated: '2026-07-22'
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-11-02'
   method: derived
 created: '2026-03-27'
 modified: '2026-09-05'
